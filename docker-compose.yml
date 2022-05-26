@@ -8,5 +8,5 @@ services:
 
 networks:
     default:
-        eventmod-network:
-            external: true
+        external:
+            name: eventmod
