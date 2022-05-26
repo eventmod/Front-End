@@ -1,0 +1,14 @@
+version: "1"
+services:
+    frontend:
+        image: ghcr.io/chicky0/front-end:latest
+        container_name: frontend
+        ports: 
+            - "8080:8080"
+        networks:
+            - eventmod-network
+
+networks:
+    default:
+        eventmod-network:
+            external: true
