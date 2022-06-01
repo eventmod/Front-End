@@ -12,13 +12,14 @@
           <div id="title" class="flex flex-col gap-y-2">
             <label for="title" class="uppercase text-violet-900 font-semibold select-none">Event Title</label>
             <input id="title" type="text" v-model="Ev_Name" placeholder="" :class="inputClass"/>
-            <span v-if="this.invalidEv_Name" :class="errorText">Invalid</span>
+            <span v-if="this.invalidEv_Name" :class="errorText">**Please enter Title**</span>
           </div>
           <!-- Title -->
           <!-- Description -->
           <div id="description" class="flex flex-col gap-y-2">
             <label for="description" class="uppercase text-violet-900 font-semibold select-none">Event Description</label>
             <textarea id="description" v-model="Ev_Description" placeholder="" class="resize-none h-52" :class="inputClass" />
+            <span v-if="this.invalidEv_Description" :class="errorText">**Please enter Description**</span>
           </div>
           <!-- Description -->
           <!-- Location -->
@@ -35,18 +36,21 @@
               <option class="">อาคารคณะวิทยาศาสตร์</option>
               <option class="">อาคารวิศวะวัฒนะ</option>
             </select>
+            <span v-if="this.invalidEv_Location" :class="errorText">**Please select Location**</span>
           </div>
           <!-- Location -->
           <!-- Number Of Participant -->
           <div id="noOfPar" class="flex flex-col gap-y-2">
             <label for="nop" class="" :class="labelInput">Number of Participants</label>
             <input id="nop" type="number" v-model="Ev_NumberOfPeople" placeholder="" class="" :class="inputClass"/>
+            <span v-if="this.invalidEv_NumberOfPeople" :class="errorText">**Please enter Number of Participants**</span>
           </div>
           <!-- Number Of Participant -->
           <!-- College Year -->
           <div id="college_year" class="flex flex-col gap-y-2">
             <label for="college" class="" :class="labelInput">College Year</label>
             <input id="college" type="text" v-model="Ev_Year" placeholder="" class="" :class="inputClass" />
+            <span v-if="this.invalidEv_Year" :class="errorText">**Please enter College Year**</span>
           </div>
           <!-- College Year -->
           <!-- Contact -->
@@ -97,6 +101,7 @@
                 <input id="image" type="file" class="hidden" @change="uploadPhoto($event)" />
               </label>
             </div>
+            <span v-if="this.invalidEv_Cover" :class="errorText">**Please enter Cover**</span>
           </div>
           <!-- Cover -->
           <!-- Gender -->
@@ -107,6 +112,7 @@
               <option class="">FEMALE</option>
               <option class="">BOTH</option>
             </select>
+            <span v-if="this.invalidEv_Gender" :class="errorText">**Please select Gender**</span>
           </div>
           <!-- Gender -->
           <!-- Date & Time (Start - End Event) -->
@@ -121,12 +127,14 @@
           <div id="first_recruitment" class="flex flex-col gap-y-2">
             <label for="firstdtre" class="" :class="labelInput">First Day For Recruitment</label>
             <input id="firstdtre" type="datetime-local" v-model="Ev_StartRegis" placeholder="" class="" :class="inputClass" />
+            <span v-if="this.invalidEv_StartRegis" :class="errorText">**Please choose First Day Recruitment**</span>
           </div>
           <!-- First Day Recruitment -->
           <!-- Last Day Recruitment -->
           <div id="last_recruitment" class="flex flex-col gap-y-2">
             <label for="lastdtre" class="" :class="labelInput">Last Day For Recruitment</label>
             <input id="lastdtre" type="datetime-local" v-model="Ev_EndRegis" placeholder="" class="" :class="inputClass" />
+            <span v-if="this.invalidEv_EndRegis" :class="errorText">**Please choose Last Day Recruitment**</span>
           </div>
           <!-- Last Day Recruitment -->
 
