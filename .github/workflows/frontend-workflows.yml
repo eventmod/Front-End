@@ -36,5 +36,7 @@ jobs:
           script: |
             cd front-End/
             git pull origin master
+            sudo docker rm -f frontend
+            sudo docker rmi ghcr.io/chicky0/eventmod-frontend
             sudo docker pull ghcr.io/chicky0/eventmod-frontend:latest
             sudo docker-compose up -d
