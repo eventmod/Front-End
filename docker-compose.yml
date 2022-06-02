@@ -3,7 +3,7 @@ services:
     frontend:
         container_name: frontend
         build: .
-        image: frontend:latest
+        image: ghcr.io/chicky0/eventmod-frontend:latest
         ports: 
             - "8080:8080"
 
