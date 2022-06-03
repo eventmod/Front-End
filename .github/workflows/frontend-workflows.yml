@@ -2,7 +2,7 @@ name: deploy-frontend-eventmod
 on:
   push:
     branches:
-      - master
+      - dev
 jobs:
   build:
     runs-on: ubuntu-20.04
@@ -35,7 +35,7 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             cd Front-End/
-            git pull origin master
+            git pull origin dev
             sudo docker rm -f frontend
             sudo docker rmi ghcr.io/chicky0/eventmod-frontend
             sudo docker pull ghcr.io/chicky0/eventmod-frontend:latest
