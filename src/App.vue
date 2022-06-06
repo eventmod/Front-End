@@ -4,7 +4,7 @@
 
 <style>
 #app {
-  font-family: 'Poppins', sans-serif, 'Times New Roman', Times, serif;
+  font-family: 'Poppins',  'Times New Roman', Times, serif, sans-serif;
 }
 
 </style>
