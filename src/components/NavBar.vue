@@ -6,7 +6,7 @@
         <img src="../assets/logo.png" class="ml-1" />
       </a>
       <div class=" ml-auto">
-        <a href="/create" class="text-white select-none">New Activity</a>
+        <a href="/create" class="text-white select-none">New Event</a>
         <span class="text-white bg-gradient-to-r from-orange-500 to-orange-300 select-none rounded-full px-2 ml-3 align-middle">Username</span>
       </div>
     </div>
