@@ -57,8 +57,8 @@
 
 <style>
 .welcome{
-  background-color: #F5F5FE;
   background-image: url("../assets/Vector2.png");
+  background-color: #F5F5FE;
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-position: right;
