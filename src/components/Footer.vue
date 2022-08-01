@@ -8,7 +8,7 @@
       <span class="bg-orange-400"></span>
       <span class="bg-red-400"></span>
     </div>
-    <div class="h-52 py-16">
+    <div class="h-40 py-8">
       <div class="flex flex-row mx-auto gap-x-2 w-fit">
         <span class="font-medium text-lg select-none">Eventmod</span>
         <img src="../assets/logo.png" class="" />
