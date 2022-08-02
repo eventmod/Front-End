@@ -1,7 +1,7 @@
 <template>
 	<div class="navbar">
     <div class="bg-gradient-to-r from-purple-900 to-purple-700 py-1.5 px-44 flex">
-      <a href="/" class="flex flex-row">
+      <a href="/home" class="flex flex-row">
         <span class="text-white font-bold align-middle select-none">Eventmod</span>
         <img src="../assets/logo.png" class="ml-1" />
       </a>
