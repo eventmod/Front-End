@@ -86,6 +86,14 @@
   </div>
 </template>
 
+<style>
+#aa{
+  background-image: url(../assets/Group1.png);
+  background-repeat: no-repeat;
+  background-size: 100% 28rem;
+}
+</style>
+
 <script>
 // @ is an alias to /src
 
@@ -101,7 +109,7 @@ export default {
 	],
 	data() {
 		return {
-      event: {},
+      event: [],
       eventFirstRegis: {
         year: '',
         day: '',
@@ -175,11 +183,3 @@ export default {
 	}
 }
 </script>
-
-<style>
-#aa{
-background-image: url(../assets/Group1.png);
-background-repeat: no-repeat;
-background-size: 100% 28rem;
-}
-</style>
