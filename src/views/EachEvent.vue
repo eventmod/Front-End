@@ -33,12 +33,20 @@
       </div>
       <!-- Date & Time (Start event - end event) -->
 
-      <!-- Location -->
-      <div class="flex flex-col">
-        <span class="font-bold">Location</span>
-        <span class="">{{ event.eventLocation }}</span>
+      <div class="grid grid-cols-2 gap-y-8">
+        <!-- Type Of Event -->
+        <div class="flex flex-col">
+          <span class="font-bold">Type Of Event</span>
+          <span class="">{{ event.eventType }}</span>
+        </div>
+        <!-- Type Of Event -->
+        <!-- Location -->
+        <div class="flex flex-col">
+          <span class="font-bold">Location</span>
+          <span class="">{{ event.eventLocation }}</span>
+        </div>
+        <!-- Location -->
       </div>
-      <!-- Location -->
 
       <div class="grid grid-cols-2 gap-y-8">
         <!-- College Years -->
@@ -49,10 +57,9 @@
         <!-- College Years -->
 
         <!-- Number of Participant -->
-        <div class="grid grid-cols-6">
-          <span class="font-bold col-span-3">Number of Participant</span>
-          <span class="">{{ event.eventNumberOfPeople }}</span>
-          <span class="col-span-2">participants.</span>
+        <div class="grid grid-cols-2">
+          <span class="font-bold">Number of Participant</span>
+          <span class="">{{ event.eventNumberOfPeople }}&nbsp;participants.</span>
         </div>
         <!-- Number of Participant -->
         
@@ -97,9 +104,11 @@
       <!-- Contact -->
       <div class="flex flex-col gap-y-2">
         <span class="font-bold">Contact (Name and Phone Number)</span>
-        <div class="flex flex-row gap-x-2">
-          <span class="">P'Win</span>
-          <span class="">(064-163-2345)</span>
+        <div v-for="c in contact" :key="c.contactID" class="grid grid-cols-12 gap-x-2">
+          <span class="col-span-3">{{ c.contactName }}</span>
+          <span class="col-span-3">({{ c.contactPhone }})</span>
+          <span class="col-span-6">Email: {{ c.contactEmail }}</span>
+
         </div>
       </div>
       <!-- Contact -->
@@ -133,6 +142,7 @@ export default {
 	data() {
 		return {
       event: [],
+      contact: [],
 
       host: process.env.VUE_APP_EVENTMOD_HOST,
 		}
@@ -140,6 +150,14 @@ export default {
 	methods: {
     async fetchEvent() {
       const res = await fetch(`${this.host}/events/${this.$route.params.id}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+      return data;
+    },
+
+    async fetchContact() {
+      const res = await fetch(`${this.host}/eventcontact/${this.$route.params.id}`, {
         method: "GET",
       });
       const data = await res.json();
@@ -183,6 +201,7 @@ export default {
 	},
 	async created() {
     this.event = await this.fetchEvent();
+    this.contact = await this.fetchContact();
 	}
 }
 </script>
