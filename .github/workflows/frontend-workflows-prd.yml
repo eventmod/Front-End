@@ -1,0 +1,44 @@
+name: deploy-frontend-eventmod
+on:
+  push:
+    branches:
+      - master
+  issues:
+    types: opened
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+      - name: pull images and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd Front-End/
+            git checkout master
+            git pull origin master
+            docker rm -f frontend-prd
+            docker rmi ghcr.io/chicky0/eventmod-frontend
+            docker build -f Dockerfile . --tag ghcr.io/eventmod/eventmod-frontend:prd
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+      - name: pull images and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd Front-End/
+            git pull origin master
+            docker-compose -f docker-compose.yml up -d
