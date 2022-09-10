@@ -23,7 +23,7 @@ jobs:
             git checkout master
             git pull origin master
             docker rm -f frontend-prd
-            docker rmi ghcr.io/chicky0/eventmod-frontend
+            docker rmi ghcr.io/eventmod/eventmod-frontend
             docker build -f Dockerfile . --tag ghcr.io/eventmod/eventmod-frontend:prd
   deploy:
     needs: build

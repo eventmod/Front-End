@@ -23,8 +23,8 @@ jobs:
             git checkout dev
             git pull origin dev
             docker rm -f frontend-dev
-            docker rmi ghcr.io/chicky0/eventmod-frontend
-            docker build -f Dockerfiled-dev . --tag ghcr.io/eventmod/eventmod-frontend:dev
+            docker rmi ghcr.io/eventmod/eventmod-frontend
+            docker build -f Dockerfile-dev . --tag ghcr.io/eventmod/eventmod-frontend:dev
   deploy:
     needs: build
     runs-on: ubuntu-20.04
