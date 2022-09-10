@@ -19,7 +19,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd Front-End/
+            cd frontend/
             git checkout dev
             git pull origin dev
             docker rm -f frontend-dev
@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.SSH_PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            cd Front-End/
+            cd frontend/
             git pull origin dev
             docker-compose -f docker-compose-dev.yml up -d
   notify:
