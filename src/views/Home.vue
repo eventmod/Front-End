@@ -1,13 +1,13 @@
 <template>
-  <div class="home">
+  <div class="home" style="background-color: #F5F5FE;">
     <NavBar class="overflow-hidden fixed top-0 w-full" />
-    <div class="mt-20 mx-72">
-      <span class="text-violet-900 font-bold text-2xl">Hi, EventmodAdmin</span>
+    <div class="pt-20 mx-72">
+      <span class="text-violet-900 font-bold text-2xl">Hi, Eventmod Admin</span>
       <div class="flex flex-row bg-yellow-50 my-12 px-16 py-12">
         <div class="flex flex-col gap-y-4 mr-auto">
           <span class="text-violet-900 font-bold text-2xl">Welcome to EventMod</span>
           <span class="text-violet-900">Lorem Ipsum is simply dummy text of the printing and typeseng industry.</span>
-          <a href="/create" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 py-2 px-4 rounded-md shadow-lg text-lg capitalize w-fit">New Activity</a>
+          <a href="/create" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 py-2 px-4 rounded-full shadow-lg text-lg capitalize w-5/12 text-center">New Event</a>
         </div>
         <div class="ml-auto mr-16">
           <img src="../assets/event.png" class="w-80" />
@@ -15,21 +15,81 @@
       </div>
       
       <!-- Search Box -->
-      <div class="flex flex-row rounded-md shadow-md w-full px-2">
-        <i class="ri-search-line text-lg self-center text-gray-400"></i>
-        <input id="searchText" type="text" v-model="inputSearchText" placeholder="Search" class="rounded-md focus:outline-none py-1 px-2 w-full placeholder-gray-400" />
+      <div class="grid grid-cols-12 w-full gap-y-6 gap-x-4">
+        <!-- First Row -->
+        <div class="col-span-2 justify-self-start">
+          <select class="h-12 w-36" :class="inputClass" v-model="status">
+            <option class="">Activate</option>
+            <option class="">Deactivate</option>
+          </select>
+        </div>
+        <div class="col-span-8 flex flex-row rounded-md shadow-md bg-white justify-self-center w-full h-12 px-2">
+          <i class="ri-search-line text-lg self-center text-gray-400"></i>
+          <input id="searchText" type="text" v-model="inputSearchText" placeholder="Search Event" class="rounded-md focus:outline-none py-1 px-2 w-full placeholder-gray-400" />
+        </div>
+        <div class="col-span-2 justify-self-end">
+          <button type="button" :class="inputClass" class="h-12 w-36 space-x-1">
+            <span class="ri-equalizer-line"></span>
+            <span class="" @click="this.showFilters = !this.showFilters">Filters</span>
+          </button>
+        </div>
+        <!-- First Row -->
+
+        <!-- Second Row -->
+        <div v-if="showFilters" class="col-span-3">
+          <label class="" :class="labelInput">Creator Name</label>
+          <select class="h-8 w-full" :class="inputClass" v-model="cname">
+            <option class="">ชมรมติว</option>
+            <option class="">ชมรมสันทนาการและเชียร์</option>
+            <option class="">ชมรมไฟฟ้าวิชาการ</option>
+            <option class="">ชมรมอนุรักษ์</option>
+          </select>
+        </div>
+        <div v-if="showFilters" class="col-span-6">
+          <label class="" :class="labelInput">Tag</label>
+        </div>
+        <div v-if="showFilters" class="col-span-3">
+          <label class="" :class="labelInput">Type of Event</label>
+          <select class="h-8 w-full" :class="inputClass" v-model="toe">
+            <option class="">Online</option>
+            <option class="">Onsite</option>
+          </select>
+        </div>
+        <!-- Second Row -->
       </div>
       <!-- Search Box-->
 
       <!-- Each Event Component -->
       <div v-for="e in events" :key="e.eventID" class="">
-        <a :href="`/each/${ e.eventID }`">
-          <div class="flex flex-row rounded-md shadow-md my-16 bg-slate-50 py-4 px-6 gap-x-16">
-            <div class="flex flex-col gap-y-8">
-              <div class="font-bold text-xl select-none">{{ e.eventName }}</div>
-              <span class="select-none text-justify">{{ e.eventDescription }}</span>
+        <a :href="`/each/${e.eventID}`">
+          <div class="rounded-md shadow-md my-16 bg-slate-50 py-4 px-6">
+            <div class="flex flex-row gap-x-16">
+              <div class="flex flex-col gap-y-8">
+                <div class="font-bold text-xl select-none">{{ e.eventTitle }}</div>
+                <span class="select-none text-justify">{{ e.eventShortDescription }}</span>
+              </div>
+              <img :src="`${host}/Files/${e.eventCover}`" class="object-cover h-56 w-56 ml-auto" />
             </div>
-            <img :src="`${host}/Files/${e.eventCover}`" class="object-cover h-56 w-56" />
+            <div class="text-sm text-right mt-5 pt-3 border-t-2" style="color: #606367;">
+              <span class="font-medium">Date &amp; Time: </span>
+              <span class="">{{ day(new Date(e.eventStartDate)) }},&nbsp;</span>
+              <span class="">{{ month(new Date(e.eventStartDate)) }}&nbsp;</span>
+              <span class="">{{ date(new Date(e.eventStartDate)) }}</span>
+              <span class=""> - </span>
+              <span class="">{{ day(new Date(e.eventEndDate)) }},&nbsp;</span>
+              <span class="">{{ month(new Date(e.eventEndDate)) }}&nbsp;</span>
+              <span class="">{{ date(new Date(e.eventEndDate)) }}</span>
+              <span class=""> | </span>
+              <span class="">{{ hours(new Date(e.eventStartDate + " " + e.eventStartTime)) }}</span>
+              <span class="">:</span>
+              <span class="">{{ minutes(new Date(e.eventStartDate + " " + e.eventStartTime)) }}&nbsp;</span>
+              <span class="">{{ ampm(new Date(e.eventStartDate + " " + e.eventStartTime)) }}</span>
+              <span class=""> - </span>
+              <span class="">{{ hours(new Date(e.eventEndDate + " " + e.eventEndTime)) }}</span>
+              <span class="">:</span>
+              <span class="">{{ minutes(new Date(e.eventEndDate + " " + e.eventEndTime)) }}&nbsp;</span>
+              <span class="">{{ ampm(new Date(e.eventEndDate + " " + e.eventEndTime)) }}</span>
+            </div>
           </div>
         </a>
       </div>
@@ -58,9 +118,26 @@ export default {
 	],
 	data() {
 		return {
+      inputClass: {
+        "rounded-md focus:outline-none py-1 px-2 shadow-md bg-white": true,
+      },
+      labelInput: {
+        "capitalize text-violet-900 font-semibold select-none text-sm": true,
+      },
+      errorText: {
+        "text-red-500 text-sm text-left italic": true
+      },
+
+      showFilters: false,
+
       events: [],
 
-      host: process.env.VUE_APP_EVENTMOD_HOST
+      host: process.env.VUE_APP_EVENTMOD_HOST,
+
+      status: "",
+      cname: "",
+      toe: "",
+
 		}
 	},
 	methods: {
@@ -70,7 +147,39 @@ export default {
       });
       const data = await res.json();
       return data;
-    }
+    },
+
+    day(x) {
+      const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      return dayOfWeek[x.getDay()];
+    },
+
+    month(x) {
+      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      return monthNames[x.getMonth()];
+    },
+
+    date(x) {
+      return x.getDate()
+    },
+
+    hours(x) {
+      var hour = x.getHours()
+      hour = hour <=9 ? '0' + hour : hour;
+      return hour
+    },
+
+    minutes(x) {
+      var minute = x.getMinutes()
+      minute = minute <=9 ? '0' + minute : minute;
+      return minute
+    },
+
+    ampm(x) {
+      var ampm = x.getHours() >= 12 ? 'pm' : 'am';
+      return ampm
+    },
+
 	},
 	async created() {
     this.events = await this.fetchEvent();

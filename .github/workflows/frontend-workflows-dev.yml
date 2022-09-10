@@ -1,0 +1,53 @@
+name: deploy-frontend-eventmod
+on:
+  push:
+    branches:
+      - dev
+  issues:
+    types: opened
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+      - name: pull images and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd frontend/
+            git checkout dev
+            git pull origin dev
+            docker rm -f frontend-dev
+            docker rmi ghcr.io/eventmod/eventmod-frontend
+            docker build -f Dockerfile-dev . --tag ghcr.io/eventmod/eventmod-frontend:dev
+  deploy:
+    needs: build
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@main
+      - name: pull images and deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: |
+            cd frontend/
+            git pull origin dev
+            docker-compose -f docker-compose-dev.yml up -d
+  notify:
+    needs: deploy
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: snow-actions/line-notify@v1.0.0
+        with:
+          access_token: ${{ secrets.LINE_ACCESS_TOKEN }}
+          message: |
+            Deploy Frontend Success.
