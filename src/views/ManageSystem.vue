@@ -29,8 +29,8 @@
           <span class="font-semibold">Creator name</span>
           <span class="">{{ a.creators.creatorName }}</span>
           <div class="text-right space-x-3">
-            <button class="text-violet-900 border border-violet-900 rounded-md w-8 h-8"><i class="ri-delete-bin-line"></i></button>
-            <button class="text-violet-900 border border-violet-900 rounded-md w-8 h-8"><i class="ri-edit-2-line"></i></button>
+            <button type="button" class="text-violet-900 border border-violet-900 rounded-md w-8 h-8" @click="deleteAccount(a.creators.creatorID, a.accountID)"><i class="ri-delete-bin-line"></i></button>
+            <button type="button" class="text-violet-900 border border-violet-900 rounded-md w-8 h-8"><i class="ri-edit-2-line"></i></button>
           </div>
         </div>
         <div class="grid grid-cols-3">
@@ -110,6 +110,19 @@ export default {
 
     async resetPassword(accountID) {
       alert(accountID)
+    },
+
+    async deleteAccount(creatorID, accountID) {
+      console.log(creatorID)
+      console.log(accountID)
+      const res = await fetch(`${this.host}/delCreator/${creatorID}`,{method: "DELETE"})
+      if (res.ok) {
+        const response = await fetch(`${this.host}/delAccount/${accountID}`,{method: "DELETE"})
+        if (response.ok) {
+					setTimeout( () => location.reload(), 1000);
+
+        }
+      }
     },
 	},
 	async created() {

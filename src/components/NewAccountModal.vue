@@ -97,7 +97,7 @@ export default {
 					if (resp.ok) {
 						// alert("Success")
 						// this.$emit("close");
-						setTimeout( () => location.reload(), 2000);
+						setTimeout( () => location.reload(), 1000);
 						
 					}
 				} 
