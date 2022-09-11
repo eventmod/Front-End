@@ -200,6 +200,9 @@ export default {
     },
 	},
 	async created() {
+    if (localStorage.getItem('token') == "") {
+      this.$router.push("/")
+    }
     this.event = await this.fetchEvent();
     this.contact = await this.fetchContact();
 	}

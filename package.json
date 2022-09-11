@@ -10,6 +10,7 @@
   "dependencies": {
     "autoprefixer": "^10",
     "core-js": "^3.8.3",
+    "cors": "^2.8.5",
     "postcss": "^8",
     "remixicon": "^2.5.0",
     "tailwindcss": "^3",
