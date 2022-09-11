@@ -12,7 +12,7 @@
         </div>
         <div class="flex flex-col">
           <span class="text-slate-500">Add Creator account</span>
-          <button class="border border-violet-800 text-violet-800 rounded-md py-1 mr-4"><span class="ri-add-fill align-middle"></span>Add Account</button>
+          <button class="border border-violet-800 text-violet-800 rounded-md py-1 mr-4" @click="showAddAccount = true"><span class="ri-add-fill align-middle"></span>Add Account</button>
         </div>
       </div>
     </div>
@@ -24,7 +24,7 @@
       <input id="searchCreator" type="text" v-model="inputSearchCreator" placeholder="Search for creator account" class="rounded-md focus:outline-none py-1 px-2 w-full placeholder-gray-400" />
     </div>
     <div v-for="a in accounts" :key="a.creatorID" class="mx-44 mb-4">
-      <div v-if="a.creators != null" class="flex flex-col bg-white space-y-1 px-20 py-8">
+      <div v-if="a.creators != null" class="flex flex-col bg-white space-y-1 px-20 py-4">
         <div class="grid grid-cols-3">
           <span class="font-semibold">Creator name</span>
           <span class="">{{ a.creators.creatorName }}</span>
@@ -42,15 +42,23 @@
         </div>
       </div>
     </div>
+
+    <div v-if="showAddAccount" class="">
+      <NewAccount class="" @close="this.showAddAccount = false" />
+      <div class="opacity-25 fixed inset-0 z-40 bg-black"></div>
+    </div>
+
     <Footer class="mt-40 w-full" />
   </div>
 </template>
 
 <script>
 
+import NewAccount from '../components/NewAccountModal.vue'
+
 export default {
 	components: {
-
+    NewAccount,
 	},
 	props: {
 
@@ -60,6 +68,7 @@ export default {
 	data() {
 		return {
       host: process.env.VUE_APP_EVENTMOD_HOST,
+      showAddAccount: false,
       user: '',
       userDetail: '',
       accounts: '',
@@ -105,7 +114,7 @@ export default {
 	},
 	async created() {
     this.user = await this.getUserFromToken();
-    if (localStorage.getItem('token') == "" && this.user.admins != null) {
+    if (localStorage.getItem('token') != null && this.user.admins == null) {
       this.$router.push("/")
     }
     this.accounts = await this.fetchAccount()

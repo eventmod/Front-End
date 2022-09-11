@@ -266,6 +266,7 @@ export default {
 	data() {
 		return {
       stepPage: 1,
+      users: '',
 
       inputClass: {
         "rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100": true,
@@ -460,6 +461,7 @@ export default {
       // console.log(res.ok)
 			if (res.ok) {
 				const user = await res.json()
+        this.users = user
         // console.log(user)
         this.accountID = user.accountID
 			}
@@ -467,7 +469,7 @@ export default {
 	},
   
 	async created() {
-    if (localStorage.getItem('token') == "") {
+    if (localStorage.getItem('token') != null && this.users.creators == null) {
       this.$router.push("/")
     }
     await this.getAccountIDFromToken();
