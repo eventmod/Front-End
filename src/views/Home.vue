@@ -2,7 +2,7 @@
   <div class="home" style="background-color: #F5F5FE;">
     <NavBar class="overflow-hidden fixed top-0 w-full" />
     <div class="pt-20 mx-72">
-      <span class="text-violet-900 font-bold text-2xl">Hi, Eventmod Admin</span>
+      <span class="text-violet-900 font-bold text-2xl">Hi, {{ userLogin.username }}</span>
       <div class="flex flex-row bg-yellow-50 my-12 px-16 py-12">
         <div class="flex flex-col gap-y-4 mr-auto">
           <span class="text-violet-900 font-bold text-2xl">Welcome to EventMod</span>
@@ -138,11 +138,21 @@ export default {
       cname: "",
       toe: "",
 
+      userLogin: "",
+
 		}
 	},
 	methods: {
     async fetchEvent() {
       const res = await fetch(`${this.host}/events`, {
+        method: "GET",
+      });
+      const data = await res.json();
+      return data;
+    },
+
+    async fetchCreatorEvent() {
+      const res = await fetch(`${this.host}/eventsbyaccount/${this.userLogin.accountID}`, {
         method: "GET",
       });
       const data = await res.json();
@@ -179,10 +189,42 @@ export default {
       var ampm = x.getHours() >= 12 ? 'pm' : 'am';
       return ampm
     },
+    
+    getUserFromToken: async function() {
+			let token = localStorage.getItem('token')
+			const res = await fetch(`${this.host}/me`,{
+				method: "GET",
+				headers: {
+						"Authorization": token,
+					},
+			})
+      // console.log(res)
+      // console.log(res.ok)
+			if (res.ok) {
+				const user = await res.json()
+        // console.log(user)
+        return user;
+				// this.userLogin = user
+        // const username = await user.username
+        // this.username = username
+			}
+		},
 
 	},
 	async created() {
-    this.events = await this.fetchEvent();
+    if (localStorage.getItem('token') == null) {
+      this.$router.push("/")
+    }
+    this.userLogin = await this.getUserFromToken();
+    // console.log(await this.userLogin)
+    if (await this.userLogin.admins != null) {
+      this.events = await this.fetchEvent();
+    } else if (await this.userLogin.creators != null) {
+      this.events = await this.fetchCreatorEvent();
+    }
+    
+    
+    
 	}
 }
 </script>

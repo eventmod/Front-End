@@ -46,7 +46,7 @@
       <p class="text-sm">Sign in to your account below</p>
     </div>
     <div class="my-8">
-      <input type="text" v-model="username" placeholder="Username or Email" :class="inputClass" class="bg-white w-96 h-10 mb-2 placeholder:text-sm"/> <br />
+      <input type="text" v-model="username" placeholder="Username" :class="inputClass" class="bg-white w-96 h-10 mb-2 placeholder:text-sm"/> <br />
       <input type="password" v-model="password" placeholder="Password" :class="inputClass" class="bg-white w-96 h-10 mt-2 placeholder:text-sm"/>
     </div>
     <div class="">
@@ -103,15 +103,44 @@ export default {
       username: "",
       password: "",
 
+      invalidUsername: false,
+      invalidPassword: false,
+
 		}
 	},
 	methods: {
     async signIn() {
-      alert(this.username + " " + this.password);
+      this.invalidUsername = this.username === "" ? true : false;
+      this.invalidPassword = this.password === "" ? true : false;
+      const loginData = {
+        username: this.username,
+        password: this.password
+      }
+      if (!this.invalidUsername && !this.invalidPassword) {
+        const response = await fetch(`${this.host}/login`,{
+          method: "POST",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify(loginData)
+        })
+        const tk = await response.json()
+        if (response.ok) {
+          console.log(tk)
+          localStorage.setItem('token',"Bearer " + tk.token)
+          this.$router.push("/home")
+        } else {
+          throw console.error();
+        }
+        
+      }
     },
 	},
 	async created() {
-    
+    console.log(localStorage.getItem('token') != null)
+    if (localStorage.getItem('token') != null) {
+      this.$router.push("/home")      
+    }
 	}
 }
 </script>

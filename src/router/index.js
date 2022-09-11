@@ -3,6 +3,8 @@ import Welcome from '../views/Welcome.vue'
 import Home from '../views/Home.vue';
 import Create from "../views/CreateEvent.vue";
 import EachEvent from "../views/EachEvent.vue";
+import Profile from "../views/Profile.vue";
+import ManageSys from "../views/ManageSystem.vue";
 
 const routes = [
   {
@@ -24,7 +26,17 @@ const routes = [
     path: '/each/:id',
     name: 'each event',
     component: EachEvent
-  }
+  },
+  {
+    path: '/profile/:id',
+    name: 'profile',
+    component: Profile
+  },
+  {
+    path: '/manage',
+    name: 'manage system',
+    component: ManageSys
+  },
 ]
 
 const router = createRouter({
