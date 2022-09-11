@@ -394,15 +394,6 @@ export default {
 
     async addEvent(data) {
 
-      // let formData = new FormData();
-
-      // formData.append("event",JSON.stringify(data))
-      // formData.append("file", this.Ev_Cover, this.Ev_Cover.name)
-
-      // const res = await fetch(`${this.host}/addEventWithImage`,{
-      //   method: "POST",
-      //   body: formData
-      // })
       let formData = new FormData()
       formData.append("file", this.Ev_Cover,this.Ev_Cover.name);
       const res = await fetch(`${this.host}/uploadImage`,{method: "POST", body: formData})
@@ -415,32 +406,32 @@ export default {
           body: JSON.stringify(data)
           })
         if (resp.ok) {
-        // console.log(res)
-        const r = await fetch(`${this.host}/getEventByTitle/${this.Ev_Name}`,{method: "GET"})
-        const x = r.json()
-        const dataContact = {
-          contactName: this.cname1,
-          contactPhone: this.cphone1,
-          contactEmail: this.cmail1,
-          eventID: x.eventID
-        }
-        // alert("addEvent" + res.status)
-        const response = await fetch(`${this.host}/addContact`,{
-          method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
-          body: JSON.stringify(dataContact)
-        })
-        console.log("response: "+response)
-        if (response.ok) {
-          alert("addContact" + response.status)
-          this.$router.push("/home")
+        console.log(res)
+          const respo = await fetch(`${this.host}/getEventByTitle/${this.Ev_Name}`,{method: "GET", headers: {"Content-type": "application/json",}})
+          const x = await respo.json()
+          console.log(data)
+          console.log(x)
+          const dataContact = {
+            contactName: this.cname1,
+            contactPhone: this.cphone1,
+            contactEmail: this.cmail1,
+            eventID: x.eventID
+          }
+          alert("addEvent" + res.status)
+          const response = await fetch(`${this.host}/addContact`,{
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(dataContact)
+          })
+          console.log("response: "+response)
+          if (response.ok) {
+            alert("addContact" + response.status)
+            this.$router.push("/home")
+          }
         }
       }
-      }
-      
-
     },
 
     async uploadPhoto(e) {

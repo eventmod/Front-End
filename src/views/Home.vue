@@ -66,7 +66,7 @@
             <div class="flex flex-row gap-x-16">
               <div class="flex flex-col gap-y-8">
                 <div class="font-bold text-xl select-none">{{ e.eventTitle }}</div>
-                <span class="select-none text-justify">{{ e.eventShortDescription }}</span>
+                <span class="select-none text-justify">{{ e.eventLongDescription }}</span>
               </div>
               <img :src="`${host}/Files/${e.eventCover}`" class="object-cover h-56 w-56 ml-auto" />
             </div>
