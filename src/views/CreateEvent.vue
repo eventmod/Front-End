@@ -394,48 +394,44 @@ export default {
 
     async addEvent(data) {
 
-      var fullPath = document.getElementById("image").value;
-			if (fullPath) {
-				var startIndex =
-					fullPath.indexOf("\\") >= 0
-						? fullPath.lastIndexOf("\\")
-						: fullPath.lastIndexOf("/");
-				var filename = fullPath.substring(startIndex);
-				if (filename.indexOf("\\") === 0 || filename.indexOf("/") === 0) {
-					filename = filename.substring(1);
-				}
-			}
-
-      let formDataEvent = new FormData();
-
-      formDataEvent.append("event",JSON.stringify(data))
-      formDataEvent.append("file", this.Ev_Cover, data.eventCover)
-
-      const res = await fetch(`${this.host}/addEventWithImage`,{
-        method: "POST",
-        body: formDataEvent
-      })
-      console.log("res: "+res)
+      let formData = new FormData()
+      formData.append("file", this.Ev_Cover,this.Ev_Cover.name);
+      const res = await fetch(`${this.host}/uploadImage`,{method: "POST", body: formData})
       if (res.ok) {
-        // console.log(res)
-        const dataContact = {
-          contactName: this.cname1,
-          contactPhone: this.cphone1,
-          contactEmail: this.cmail1,
-          eventID: res
-        }
-        alert("addEvent" + res.status)
-        const response = await fetch(`${this.host}/addContact`,{
-          method: "POST",
-          body: JSON.stringify(dataContact)
-        })
-        console.log("response: "+response)
-        if (response.ok) {
-          alert("addContact" + response.status)
-          this.$router.push("/home")
+        const resp = await fetch(`${this.host}/addEvent`,{
+          method: "POST", 
+          headers: {
+            "Content-type": "application/json",
+          },
+          body: JSON.stringify(data)
+          })
+        if (resp.ok) {
+        console.log(res)
+          const respo = await fetch(`${this.host}/getEventByTitle/${this.Ev_Name}`,{method: "GET", headers: {"Content-type": "application/json",}})
+          const x = await respo.json()
+          console.log(data)
+          console.log(x)
+          const dataContact = {
+            contactName: this.cname1,
+            contactPhone: this.cphone1,
+            contactEmail: this.cmail1,
+            eventID: x.eventID
+          }
+          alert("addEvent" + res.status)
+          const response = await fetch(`${this.host}/addContact`,{
+            method: "POST",
+            headers: {
+              "Content-type": "application/json",
+            },
+            body: JSON.stringify(dataContact)
+          })
+          console.log("response: "+response)
+          if (response.ok) {
+            alert("addContact" + response.status)
+            this.$router.push("/home")
+          }
         }
       }
-
     },
 
     async uploadPhoto(e) {
@@ -469,7 +465,7 @@ export default {
 	},
   
 	async created() {
-    if (localStorage.getItem('token') != null && this.users.creators == null) {
+    if (localStorage.getItem('token') != null && this.users.creators != null) {
       this.$router.push("/")
     }
     await this.getAccountIDFromToken();

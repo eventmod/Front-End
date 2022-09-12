@@ -11,6 +11,9 @@
         <span class="text-white bg-gradient-to-r from-orange-500 to-orange-300 select-none rounded-full px-2 ml-3 align-middle">
 					<a :href="`/profile/${this.userLogin.accountID}`">{{ this.userLogin.username }}</a>
 				</span>
+				<button type="button" @click="logout()" class="text-white bg-gradient-to-r from-orange-500 to-orange-300 select-none rounded-full px-1 ml-3 align-middle">
+					<i class="ri-logout-box-line align-middle"></i>
+				</button>
       </div>
     </div>
 	</div>
@@ -52,6 +55,11 @@ export default {
         // const username = await user.username
         // this.username = username
 			}
+		},
+
+		logout () {
+			localStorage.removeItem("token")
+			setTimeout( () => location.reload(), 300 );
 		},
 	},
 	async created() {
