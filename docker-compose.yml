@@ -4,6 +4,8 @@ services:
         container_name: frontend-prd
         build: .
         image: ghcr.io/eventmod/eventmod-frontend:prd
+        env_file:
+            - ./.env
         ports: 
             - "8080:8080"
 
