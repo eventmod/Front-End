@@ -5,7 +5,7 @@ services:
         build: .
         image: ghcr.io/eventmod/eventmod-frontend:prd
         env_file:
-            - ./.env
+            - ./.env.prd
         ports: 
             - "8080:8080"
 
