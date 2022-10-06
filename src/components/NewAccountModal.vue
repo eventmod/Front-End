@@ -27,9 +27,11 @@
 							<option class="">วิทยาลัยสหวิทยาการ</option>
 						</select>
 					</div>
-					<div class="">
+					<div class="flex flex-row gap-4">
 						<button type="button" class="text-white bg-gradient-to-r from-orange-400 to-orange-300
             w-full py-2 rounded-full shadow-lg text-lg uppercase" @click="newAccount()">Add Account</button>
+						<button type="button" class="text-white w-full py-2 rounded-full shadow-lg text-lg uppercase"
+						style="background-color:#424874;" @click="close()">Close</button>
 					</div>
 				</div>
 			</div>
@@ -104,6 +106,12 @@ export default {
 			}
 		},
 
+		close: async function() {
+			this.inputUsername = ""
+			this.inputFaculty = ""
+			this.$emit("close");
+		},
+
     getUserFromToken: async function() {
 			let token = localStorage.getItem('token')
 			const res = await fetch(`${this.host}/me`,{
@@ -115,6 +123,8 @@ export default {
 			if (res.ok) {
 				const user = await res.json()
         return user;
+			} else {
+				this.$router.push("/")
 			}
 		},
 	},
