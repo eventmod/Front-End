@@ -331,7 +331,7 @@ export default {
       invalidCphone1: false,
       invalidCmail1: false,
 
-      host: process.env.VUE_APP_EVENTMOD_HOST + "/backend"
+      host: process.env.VUE_APP_EVENTMOD_HOST + "/api"
 		}
 	},
 	methods: {

@@ -52,7 +52,7 @@ export default {
 	],
 	data() {
 		return {
-      host: process.env.VUE_APP_EVENTMOD_HOST + "/backend",
+      host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
       user: '',
       userDetail: '',
 			inputUsername: '',
