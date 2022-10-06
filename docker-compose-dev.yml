@@ -5,7 +5,7 @@ services:
         build: .
         image: ghcr.io/eventmod/eventmod-frontend:dev
         env_file:
-            - ./.env.dev
+            - ./.env.development
         ports: 
             - "8081:8081"
 
