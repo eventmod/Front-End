@@ -132,7 +132,7 @@ export default {
 
       events: [],
 
-      host: process.env.VUE_APP_EVENTMOD_HOST,
+      host: process.env.VUE_APP_EVENTMOD_HOST + "/backend",
 
       status: "",
       cname: "",

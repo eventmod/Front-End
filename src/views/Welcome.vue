@@ -98,7 +98,7 @@ export default {
         "text-red-500 text-sm text-left italic": true
       },
 
-      host: process.env.VUE_APP_EVENTMOD_HOST,
+      host: process.env.VUE_APP_EVENTMOD_HOST + "/backend",
 
       username: "",
       password: "",

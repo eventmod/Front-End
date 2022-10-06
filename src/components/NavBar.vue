@@ -32,7 +32,7 @@ export default {
 	],
 	data() {
 		return {
-			host: process.env.VUE_APP_EVENTMOD_HOST,
+			host: process.env.VUE_APP_EVENTMOD_HOST + "/backend",
 			userLogin: "",
 		}
 	},

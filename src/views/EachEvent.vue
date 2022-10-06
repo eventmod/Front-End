@@ -144,7 +144,7 @@ export default {
       event: [],
       contact: [],
 
-      host: process.env.VUE_APP_EVENTMOD_HOST,
+      host: process.env.VUE_APP_EVENTMOD_HOST + "/backend",
 		}
 	},
 	methods: {
