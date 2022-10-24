@@ -147,7 +147,7 @@ export default {
       const res = await fetch(`${this.host}/events`, {
         method: "GET",
       });
-      const sortReverse = await res.reverse();
+      const sortReverse = await res.sort().reverse();
       const data = await sortReverse.json();
       return data;
     },
