@@ -2,7 +2,13 @@
   <div id="aa" class="Each Event pt-52">
     <NavBar class="overflow-hidden fixed top-0 w-full z-10" />
     <div class="flex flex-col bg-white mx-80 z-20 rounded-lg shadow-lg px-10 py-12 gap-y-8">
-      <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
+      <div class="flex">
+        <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
+        <span class="ml-auto text-4xl space-x-4 my-auto">
+          <span class="ri-edit-line text-gray-500 hover:text-green-500" @click="edit()"/>
+          <span class="ri-delete-bin-6-line text-gray-500 hover:text-red-500" @click="deleteEvent()"/>
+        </span>
+      </div>
       <!-- <span class="font-normal text-sm text-gray-400 -mt-4">3 May 2022</span> -->
       <img :src="`${host}/Files/${event.eventCover}`" class="w-full rounded-lg mx-auto object-cover" />
       <div class="text-justify">
@@ -23,12 +29,12 @@
           <span class="">{{ hours(new Date(event.eventStartDate + " " + event.eventStartTime)) }}</span>
           <span class="">:</span>
           <span class="">{{ minutes(new Date(event.eventStartDate + " " + event.eventStartTime)) }}&nbsp;</span>
-          <span class="">{{ ampm(new Date(event.eventStartDate + " " + event.eventStartTime)) }}</span>
+          <!-- <span class="">{{ ampm(new Date(event.eventStartDate + " " + event.eventStartTime)) }}</span> -->
           <span class="">&nbsp;-&nbsp;</span>
           <span class="">{{ hours(new Date(event.eventEndDate + " " + event.eventEndTime)) }}</span>
           <span class="">:</span>
           <span class="">{{ minutes(new Date(event.eventEndDate + " " + event.eventEndTime)) }}&nbsp;</span>
-          <span class="">{{ ampm(new Date(event.eventEndDate + " " + event.eventEndTime)) }}</span>
+          <!-- <span class="">{{ ampm(new Date(event.eventEndDate + " " + event.eventEndTime)) }}</span> -->
         </div>
       </div>
       <!-- Date & Time (Start event - end event) -->
@@ -78,7 +84,7 @@
             <span class="">{{ hours(new Date(event.eventStartRegis)) }}</span>
             <span class="">:</span>
             <span class="">{{ minutes(new Date(event.eventStartRegis)) }}&nbsp;</span>
-            <span class="">{{ ampm(new Date(event.eventStartRegis)) }}</span>
+            <!-- <span class="">{{ ampm(new Date(event.eventStartRegis)) }}</span> -->
           </div>
         </div>
         <!-- First day for Recruitment -->
@@ -95,7 +101,7 @@
             <span class="">{{ hours(new Date(event.eventEndRegis)) }}</span>
             <span class="">:</span>
             <span class="">{{ minutes(new Date(event.eventEndRegis)) }}&nbsp;</span>
-            <span class="">{{ ampm(new Date(event.eventEndRegis)) }}</span>
+            <!-- <span class="">{{ ampm(new Date(event.eventEndRegis)) }}</span> -->
           </div>
         </div>
         <!-- Last day for Recruitment -->
@@ -164,6 +170,17 @@ export default {
       return data;
     },
 
+    async edit() {
+      this.$router.push("/edit/" + this.$route.params.id)
+    },
+
+    async deleteEvent() {
+      await fetch(`${this.host}/deleteevents/${this.$route.params.id}`, {
+        method: "DELETE",
+      });
+      await this.$router.push("/home")
+    },
+
     day(x) {
       const dayOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
       return dayOfWeek[x.getDay()];
@@ -200,7 +217,7 @@ export default {
     },
 	},
 	async created() {
-    if (localStorage.getItem('token') == "") {
+    if (localStorage.getItem('token') === null) {
       this.$router.push("/")
     }
     this.event = await this.fetchEvent();

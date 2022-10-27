@@ -126,7 +126,7 @@ export default {
         })
         const tk = await response.json()
         if (response.ok) {
-          console.log(tk)
+          // console.log(tk)
           localStorage.setItem('token',"Bearer " + tk.token)
           this.$router.push("/home")
         } else {
@@ -137,7 +137,7 @@ export default {
     },
 	},
 	async created() {
-    console.log(localStorage.getItem('token') != null)
+    // console.log(localStorage.getItem('token') != null)
     if (localStorage.getItem('token') != null) {
       this.$router.push("/home")      
     }

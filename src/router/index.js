@@ -5,6 +5,7 @@ import Create from "../views/CreateEvent.vue";
 import EachEvent from "../views/EachEvent.vue";
 import Profile from "../views/Profile.vue";
 import ManageSys from "../views/ManageSystem.vue";
+import EditEvent from "../views/EditEvent.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
     path: '/manage',
     name: 'manage system',
     component: ManageSys
+  },
+  {
+    path: '/edit/:id',
+    name: 'edit',
+    component: EditEvent
   },
 ]
 

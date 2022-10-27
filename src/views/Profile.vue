@@ -52,7 +52,7 @@ export default {
     },
 	},
 	async created() {
-    if (localStorage.getItem('token') == "") {
+    if (localStorage.getItem('token') === null) {
       this.$router.push("/")
     }
     this.user = await this.getUserFromToken();

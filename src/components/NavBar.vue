@@ -9,7 +9,7 @@
         <a v-if="this.userLogin.creators != null" href="/create" class="text-white select-none">New Event</a>
 				<a v-if="this.userLogin.admins != null" href="/manage" class="text-white select-none">Manage Account</a>
         <span class="text-white bg-gradient-to-r from-orange-500 to-orange-300 select-none rounded-full px-2 ml-3 align-middle">
-					<a :href="`/profile/${this.userLogin.accountID}`">{{ this.userLogin.username }}</a>
+					<a :href="`/profile/${this.userLogin.accountID}`">{{ this.username }}</a>
 				</span>
 				<button type="button" @click="logout()" class="text-white bg-gradient-to-r from-orange-500 to-orange-300 select-none rounded-full px-1 ml-3 align-middle">
 					<i class="ri-logout-box-line align-middle"></i>
@@ -33,7 +33,8 @@ export default {
 	data() {
 		return {
 			host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
-			userLogin: "",
+			userLogin: Object,
+			username: ""
 		}
 	},
 	methods: {
@@ -60,13 +61,15 @@ export default {
 		logout () {
 			localStorage.removeItem("token")
 			setTimeout( () => location.reload(), 300 );
+			
 		},
 	},
 	async created() {
-		if (localStorage.getItem('token') == "") {
+		if (localStorage.getItem('token') === null) {
       this.$router.push("/")
     }
     this.userLogin = await this.getUserFromToken();
+		this.username = await this.userLogin.username
 	}
 };
 </script>
