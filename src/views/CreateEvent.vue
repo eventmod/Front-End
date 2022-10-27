@@ -64,7 +64,7 @@
             <!-- Short Description -->
             <div id="shortdes" class="flex flex-col gap-y-2">
               <label for="shortdes" class="" :class="labelInput">Short Description</label>
-              <input id="shortdes" type="text" v-model="Ev_ShortDesc" placeholder="" class="" :class="inputClass" />
+              <input id="shortdes" type="text" v-model="Ev_ShortDesc" placeholder="" class="" :class="inputClass" maxlength="60" />
               <span v-if="this.invalidEv_ShortDesc" :class="errorText">**Please enter Short Description**</span>
             </div>
             <!-- Short Description -->
@@ -189,11 +189,11 @@
                 <label for="start" class="" :class="labelInput">Start Event</label>
                 <div class="grid grid-cols-2 gap-x-4">
                   <div class="flex flex-col gap-y-2">
-                    <input id="startdate" type="date" v-model="Ev_StartDate" placeholder="" class="" :class="inputClass" />
+                    <input id="startdate" type="date" v-model="Ev_StartDate" placeholder="dd-mm-yyyy" class="" :class="inputClass" />
                     <span v-if="this.invalidEv_StartDate" :class="errorText">**Please choose Start Event Date**</span>
                   </div>
                   <div class="flex flex-col gap-y-2">
-                    <input id="starttime" type="time" v-model="Ev_StartTime" placeholder="" class="" :class="inputClass" />
+                    <input id="starttime" type="time" v-model="Ev_StartTime" placeholder="dd-mm-yyyy" class="" :class="inputClass" />
                     <span v-if="this.invalidEv_StartTime" :class="errorText">**Please choose Start Event Time**</span>
                   </div>
                 </div>
@@ -266,7 +266,7 @@ export default {
 	data() {
 		return {
       stepPage: 1,
-      users: '',
+      users: null,
 
       inputClass: {
         "rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100": true,
@@ -335,16 +335,14 @@ export default {
 		}
 	},
 	methods: {
-    // submitForm(){
-    //   alert("1")
-    // },
+    
     submitForm() {
 
       this.invalidEv_Name = this.Ev_Name === "" ? true : false;
       this.invalidEv_Cover = this.Ev_Cover.name === "" ? true : false;
       this.invalidEv_Description = this.Ev_Description === "" ? true : false;
       this.invalidEv_ShortDesc = this.Ev_ShortDesc === "" ? true : false;
-      this.invalidEv_Cost = this.Ev_Cost === 0 ? true : false;
+      this.invalidEv_Cost = this.Ev_Cost < 0 ? true : false;
       this.invalidEv_Location = this.Ev_Location === "" ? true : false;
       this.invalidEv_Type = this.Ev_Type === "" ? true : false;
       this.invalidEv_NumberOfPeople = this.Ev_NumberOfPeople === 0 ? true : false;
@@ -366,19 +364,36 @@ export default {
                           this.invalidCname1 || this.invalidCphone1 || this.invalidCmail1)
       
       if (checkForm) {
+
+        const stDate = new Date(this.Ev_StartDate)
+        const stDateString = stDate.getFullYear() + "-" + (stDate.getMonth()+1) + "-" + stDate.getDate()
+
+        const eDate = new Date(this.Ev_EndDate)
+        const eDateString = eDate.getFullYear() + "-" + (eDate.getMonth()+1) + "-" + eDate.getDate()
+
+        const stRegis = new Date(this.Ev_StartRegis)
+        const stRegisString = stRegis.getFullYear() + "-" + (stRegis.getMonth()+1) + "-" + stRegis.getDate() + " " + this.hours(stRegis) + ":" + this.minutes(stRegis)
+
+        const eRegis = new Date(this.Ev_EndRegis)
+        const eRegisString = eRegis.getFullYear() + "-" + (eRegis.getMonth()+1) + "-" + eRegis.getDate() + " " + this.hours(eRegis) + ":" + this.minutes(eRegis)
+
         const data = {
           eventTitle: this.Ev_Name,
-          eventCover: this.Ev_Cover.name,
+          eventCover: "Event-Cover-" + this.Ev_Cover.name,
           eventShortDescription: this.Ev_ShortDesc,
           eventLongDescription: this.Ev_Description,
           eventLocation: this.Ev_Location,
           eventNumberOfPeople: this.Ev_NumberOfPeople,
-          eventStartDate: new Date(this.Ev_StartDate),
+          // eventStartDate: new Date(this.Ev_StartDate),
+          eventStartDate: stDateString,
           eventStartTime: this.Ev_StartTime,
-          eventEndDate: new Date(this.Ev_EndDate),
+          // eventEndDate: new Date(this.Ev_EndDate),
+          eventEndDate: eDateString,
           eventEndTime: this.Ev_EndTime,
-          eventStartRegis: new Date(this.Ev_StartRegis),
-          eventEndRegis: new Date(this.Ev_EndRegis),
+          // eventStartRegis: new Date(this.Ev_StartRegis),
+          eventStartRegis: stRegisString,
+          // eventEndRegis: new Date(this.Ev_EndRegis),
+          eventEndRegis: eRegisString,
           eventCost: this.Ev_Cost,
           eventYear: this.Ev_Year,
           eventType: this.Ev_Type,
@@ -386,16 +401,28 @@ export default {
           accountID: this.accountID
         }
 
-      // console.log(data)
+      console.log(data)
       this.addEvent(data)
 
       }
     },
 
+    hours(x) {
+      var hour = x.getHours()
+      hour = hour <=9 ? '0' + hour : hour;
+      return hour
+    },
+
+    minutes(x) {
+      var minute = x.getMinutes()
+      minute = minute <=9 ? '0' + minute : minute;
+      return minute
+    },
+
     async addEvent(data) {
 
       let formData = new FormData()
-      formData.append("file", this.Ev_Cover,this.Ev_Cover.name);
+      formData.append("file", this.Ev_Cover,"Event-Cover-" + this.Ev_Cover.name);
       const res = await fetch(`${this.host}/uploadImage`,{method: "POST", body: formData})
       if (res.ok) {
         const resp = await fetch(`${this.host}/addEvent`,{
@@ -411,24 +438,42 @@ export default {
           const x = await respo.json()
           console.log(data)
           console.log(x)
-          const dataContact = {
+          const dataContact1 = {
             contactName: this.cname1,
             contactPhone: this.cphone1,
             contactEmail: this.cmail1,
             eventID: x.eventID
           }
-          alert("addEvent" + res.status)
           const response = await fetch(`${this.host}/addContact`,{
             method: "POST",
             headers: {
               "Content-type": "application/json",
             },
-            body: JSON.stringify(dataContact)
+            body: JSON.stringify(dataContact1)
           })
-          console.log("response: "+response)
-          if (response.ok) {
-            alert("addContact" + response.status)
-            this.$router.push("/home")
+          if(response.ok) {
+            if(this.cname2 !== "" && this.cphone2 !== "" && this.cmail2 !== "") {
+              // ใส่ข้อมูล
+              const dataContact2 = {
+                contactName: this.cname2,
+                contactPhone: this.cphone2,
+                contactEmail: this.cmail2,
+                eventID: x.eventID
+              }
+              const response1 = await fetch(`${this.host}/addContact`,{
+                method: "POST",
+                headers: {
+                  "Content-type": "application/json",
+                },
+                body: JSON.stringify(dataContact2)
+              })
+              if (response1.ok) {
+                this.$router.push("/home")
+              }
+            } else {
+              // ไม่ใส่ข้อมูล
+              this.$router.push("/home")
+            }  
           }
         }
       }
@@ -453,22 +498,19 @@ export default {
 						"Authorization": token,
 					},
 			})
-      // console.log(res)
-      // console.log(res.ok)
 			if (res.ok) {
 				const user = await res.json()
         this.users = user
-        // console.log(user)
         this.accountID = user.accountID
 			}
 		},
 	},
   
 	async created() {
-    if (localStorage.getItem('token') != null && this.users.creators != null) {
+    await this.getAccountIDFromToken();
+    if (localStorage.getItem('token') === null && await this.users.creators === null) {
       this.$router.push("/")
     }
-    await this.getAccountIDFromToken();
 	}
 }
 </script>
