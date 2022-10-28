@@ -122,6 +122,10 @@
     </div>
     <Footer class="mt-40 w-full" />
   </div>
+  <div v-if="showModal">
+    <confirm-modal @confirm="confirm" />
+    <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+  </div>
 </template>
 
 <style>
@@ -135,10 +139,12 @@
 <script>
 // @ is an alias to /src
 
+import ConfirmModal from '../components/ConfirmModal.vue';
+
 export default {
   name: 'Each Event',
   components: {
-    
+    ConfirmModal,
   },
 	props: {
 
@@ -151,9 +157,25 @@ export default {
       contact: [],
 
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
+
+      showModal: false
 		}
 	},
 	methods: {
+
+    async confirm(ans) {
+      if(ans == false) {
+        this.showModal = false
+      } else {
+        const res = await fetch(`${this.host}/deleteevents/${this.$route.params.id}`, {
+          method: "DELETE",
+        })
+        if(res.ok) {
+          await this.$router.push("/home")
+        }
+      }
+    },
+
     async fetchEvent() {
       const res = await fetch(`${this.host}/events/${this.$route.params.id}`, {
         method: "GET",
@@ -175,10 +197,7 @@ export default {
     },
 
     async deleteEvent() {
-      await fetch(`${this.host}/deleteevents/${this.$route.params.id}`, {
-        method: "DELETE",
-      });
-      await this.$router.push("/home")
+      this.showModal = true
     },
 
     day(x) {
