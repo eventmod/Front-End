@@ -158,7 +158,8 @@ export default {
         method: "GET",
       });
       const data = await res.json();
-      return data;
+      const sortReverse = await data.sort().reverse();
+      return sortReverse;
     },
 
     day(x) {
