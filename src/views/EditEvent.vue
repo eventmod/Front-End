@@ -452,13 +452,13 @@ export default {
           }
           const resContact = await fetch(`${this.host}/editContact/${this.oldContact[0].contactID}`,{
             method: "PUT",
-            body: dataContact,
+            body: JSON.stringify(dataContact),
             headers: {
               "Content-type": "application/json",
             },
           })
           if(this.cname2 !== "" && this.cphone2 !== "" && this.cmail2 !== "") {
-            const dataContact = {
+            const dataContact1 = {
               contactName: this.cname2,
               contactPhone: this.cphone2,
               contactEmail: this.cmail2,
@@ -466,10 +466,10 @@ export default {
             }
             await fetch (`${this.host}/editContact/${this.oldContact[1].contactID}`,{
               method: "PUT",
+              body: JSON.stringify(dataContact1),
               headers: {
                 "Content-type": "application/json",
               },
-              body: dataContact
             })
           }
           if(resContact.ok === true) {
