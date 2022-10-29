@@ -65,9 +65,9 @@
         <a :href="`/each/${e.eventID}`">
           <div class="rounded-md shadow-md my-16 bg-slate-50 py-4 px-6">
             <div class="flex flex-row gap-x-16">
-              <div class="flex flex-col gap-y-8">
+              <div class="flex flex-col gap-y-8 w-full">
                 <div class="font-bold text-xl select-none">{{ e.eventTitle }}</div>
-                <span class="select-none text-justify">{{ e.eventLongDescription }}</span>
+                <div class="select-none text-justify">{{ e.eventLongDescription }}</div>
               </div>
               <img :src="`${host}/Files/${e.eventCover}`" class="object-cover h-56 w-56 ml-auto" />
             </div>
@@ -225,9 +225,6 @@ export default {
     } else if (await this.userLogin.creators != null) {
       this.events = await this.fetchCreatorEvent();
     }
-    
-    
-    
 	}
 }
 </script>
