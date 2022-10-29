@@ -26,7 +26,9 @@ export default {
 	},
 
   async created() {
-
+    if(window.innerWidth >= 1024) {
+      this.$router.push("/")
+    }
   }
 }
 </script>
