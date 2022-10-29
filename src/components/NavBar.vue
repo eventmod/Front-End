@@ -60,8 +60,7 @@ export default {
 
 		logout () {
 			localStorage.removeItem("token")
-			setTimeout( () => location.reload(), 300 );
-			
+			setTimeout(this.$router.push("/"), 500)
 		},
 	},
 	async created() {
