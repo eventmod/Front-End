@@ -130,7 +130,7 @@ export default {
           localStorage.setItem('token',"Bearer " + tk.token)
           this.$router.push("/home")
         } else {
-          throw console.error();
+          throw console.log(ErrorEvent)
         }
         
       }
@@ -138,8 +138,12 @@ export default {
 	},
 	async created() {
     // console.log(localStorage.getItem('token') != null)
-    if (localStorage.getItem('token') != null) {
-      this.$router.push("/home")      
+    if(window.innerWidth < 1024) {
+      this.$router.push("/notsupport")
+    } else {
+      if (localStorage.getItem('token') != null) {
+        this.$router.push("/home")      
+      }
     }
 	}
 }
