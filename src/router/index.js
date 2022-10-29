@@ -6,6 +6,7 @@ import EachEvent from "../views/EachEvent.vue";
 import Profile from "../views/Profile.vue";
 import ManageSys from "../views/ManageSystem.vue";
 import EditEvent from "../views/EditEvent.vue";
+import NotSupportDevice from "../views/NotSupportDevice.vue";
 
 const routes = [
   {
@@ -42,6 +43,11 @@ const routes = [
     path: '/edit/:id',
     name: 'edit',
     component: EditEvent
+  },
+  {
+    path: '/notsupport',
+    name: 'not support device',
+    component: NotSupportDevice
   },
 ]
 
