@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Welcome from '../views/WEB/Welcome.vue';
-import Home from '../views/WEB/Home.vue';
-import Create from "../views/WEB/CreateEvent.vue";
-import EachEvent from "../views/WEB/EachEvent.vue";
-import Profile from "../views/WEB/Profile.vue";
-import ManageSys from "../views/WEB/ManageSystem.vue";
-import EditEvent from "../views/WEB/EditEvent.vue";
-import NotSupportDevice from "../views/WEB/NotSupportDevice.vue";
+import Welcome from '../views/Welcome.vue';
+import Home from '../views/Home.vue';
+import Create from "../views/CreateEvent.vue";
+import EachEvent from "../views/EachEvent.vue";
+import Profile from "../views/Profile.vue";
+import ManageSys from "../views/ManageSystem.vue";
+import EditEvent from "../views/EditEvent.vue";
+import NotSupportDevice from "../views/NotSupportDevice.vue";
 import AuthenKMUTT from "../views/LIFF/AuthenKMUTT.vue";
 import Each from "../views/LIFF/Each.vue";
 

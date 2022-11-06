@@ -139,7 +139,7 @@
 <script>
 // @ is an alias to /src
 
-import ConfirmModal from '../../components/ConfirmModal.vue';
+import ConfirmModal from '../components/ConfirmModal.vue';
 
 export default {
   name: 'Each Event',
