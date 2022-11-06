@@ -7,8 +7,8 @@ import Profile from "../views/Profile.vue";
 import ManageSys from "../views/ManageSystem.vue";
 import EditEvent from "../views/EditEvent.vue";
 import NotSupportDevice from "../views/NotSupportDevice.vue";
-import AuthenKMUTT from "../views/LIFF/AuthenKMUTT.vue";
-import Each from "../views/LIFF/Each.vue";
+import AuthenKMUTT from "../views/LIFFAuthenKMUTT.vue";
+import Each from "../views/LIFFEach.vue";
 
 const routes = [
   {

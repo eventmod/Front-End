@@ -13,7 +13,7 @@
 </template>
 
 <script>
-// import liff from "@line/liff";
+import liff from "@line/liff";
 
 export default {
   data() {
@@ -26,7 +26,7 @@ export default {
 
   },
   async created() {
-    // await liff.init({ liffId: '1657624777-GQkya04l' });
+    await liff.init({ liffId: '1657618262-bmwyAAVo' });
 
     const urlParams = new URLSearchParams(window.location.search);
     this.param = urlParams.get('param')
