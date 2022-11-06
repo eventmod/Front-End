@@ -54,7 +54,7 @@
 
 <script>
 
-import NewAccount from '../components/NewAccountModal.vue'
+import NewAccount from '../../components/NewAccountModal.vue'
 
 export default {
 	components: {
