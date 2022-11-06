@@ -2,12 +2,13 @@
   <div class="home" style="background-color: #F5F5FE;">
     <NavBar class="overflow-hidden fixed top-0 w-full" />
     <div class="pt-20 mx-72">
-      <span class="text-violet-900 font-bold text-2xl">Hi, {{ userLogin.username }}</span>
+      <span class="text-violet-900 font-bold text-2xl">Hi, <span class="text-violet-700 font-semibold">{{ userLogin.username }}</span></span>
       <div class="flex flex-row bg-yellow-50 my-12 px-16 py-12">
         <div class="flex flex-col gap-y-4 mr-auto">
           <span class="text-violet-900 font-bold text-2xl">Welcome to EventMod</span>
           <span class="text-violet-900">Lorem Ipsum is simply dummy text of the printing and typeseng industry.</span>
-          <a href="/create" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 py-2 px-4 rounded-full shadow-lg text-lg capitalize w-5/12 text-center">New Event</a>
+          <a v-if="this.userLogin.creators != null" href="/create" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 py-2 px-4 rounded-full shadow-lg text-lg capitalize w-5/12 text-center">New Event</a>
+          <a v-if="this.userLogin.admins != null" href="/manage" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 py-2 px-4 rounded-full shadow-lg text-lg capitalize w-5/12 text-center">Manage Account</a>
         </div>
         <div class="ml-auto mr-16">
           <img src="../assets/event.png" class="w-80" />
@@ -64,9 +65,9 @@
         <a :href="`/each/${e.eventID}`">
           <div class="rounded-md shadow-md my-16 bg-slate-50 py-4 px-6">
             <div class="flex flex-row gap-x-16">
-              <div class="flex flex-col gap-y-8">
+              <div class="flex flex-col gap-y-8 w-full">
                 <div class="font-bold text-xl select-none">{{ e.eventTitle }}</div>
-                <span class="select-none text-justify">{{ e.eventLongDescription }}</span>
+                <div class="select-none text-justify">{{ e.eventLongDescription }}</div>
               </div>
               <img :src="`${host}/Files/${e.eventCover}`" class="object-cover h-56 w-56 ml-auto" />
             </div>
@@ -83,12 +84,12 @@
               <span class="">{{ hours(new Date(e.eventStartDate + " " + e.eventStartTime)) }}</span>
               <span class="">:</span>
               <span class="">{{ minutes(new Date(e.eventStartDate + " " + e.eventStartTime)) }}&nbsp;</span>
-              <span class="">{{ ampm(new Date(e.eventStartDate + " " + e.eventStartTime)) }}</span>
+              <!-- <span class="">{{ ampm(new Date(e.eventStartDate + " " + e.eventStartTime)) }}</span> -->
               <span class=""> - </span>
               <span class="">{{ hours(new Date(e.eventEndDate + " " + e.eventEndTime)) }}</span>
               <span class="">:</span>
               <span class="">{{ minutes(new Date(e.eventEndDate + " " + e.eventEndTime)) }}&nbsp;</span>
-              <span class="">{{ ampm(new Date(e.eventEndDate + " " + e.eventEndTime)) }}</span>
+              <!-- <span class="">{{ ampm(new Date(e.eventEndDate + " " + e.eventEndTime)) }}</span> -->
             </div>
           </div>
         </a>
@@ -138,7 +139,7 @@ export default {
       cname: "",
       toe: "",
 
-      userLogin: "",
+      userLogin: null,
 
 		}
 	},
@@ -148,7 +149,8 @@ export default {
         method: "GET",
       });
       const data = await res.json();
-      return data;
+      const sortReverse = await data.sort().reverse();
+      return sortReverse;
     },
 
     async fetchCreatorEvent() {
@@ -156,7 +158,8 @@ export default {
         method: "GET",
       });
       const data = await res.json();
-      return data;
+      const sortReverse = await data.sort().reverse();
+      return sortReverse;
     },
 
     day(x) {
@@ -212,7 +215,7 @@ export default {
 
 	},
 	async created() {
-    if (localStorage.getItem('token') == null) {
+    if (localStorage.getItem('token') === null) {
       this.$router.push("/")
     }
     this.userLogin = await this.getUserFromToken();
@@ -222,9 +225,6 @@ export default {
     } else if (await this.userLogin.creators != null) {
       this.events = await this.fetchCreatorEvent();
     }
-    
-    
-    
 	}
 }
 </script>

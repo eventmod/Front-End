@@ -69,7 +69,7 @@ export default {
 		return {
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
       showAddAccount: false,
-      user: '',
+      user: null,
       userDetail: '',
       accounts: '',
       admins: '',
@@ -127,7 +127,7 @@ export default {
 	},
 	async created() {
     this.user = await this.getUserFromToken();
-    if (localStorage.getItem('token') != null && this.user.admins == null) {
+    if (localStorage.getItem('token') === null && await this.user.admins === null) {
       this.$router.push("/")
     }
     this.accounts = await this.fetchAccount()

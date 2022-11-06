@@ -2,7 +2,7 @@
   <div class="">
     <NavBar class="overflow-hidden fixed top-0 w-full" />
     <div class="my-11 pt-12 mx-72">
-      <span class="text-violet-900 font-bold text-2xl">Add Event</span>
+      <span class="text-violet-900 font-bold text-2xl">Edit Event ({{this.oldEvent.eventTitle}})</span>
     </div>
     <form @submit.prevent="submitForm">
       <div class="-mt-3 mx-72 px-4 py-3 bg-white rounded-xl shadow-xl">
@@ -179,6 +179,9 @@
                   <option class="">อาคารคณะเทคโนโลยีสารสนเทศ</option>
                   <option class="">อาคารคณะวิทยาศาสตร์</option>
                   <option class="">อาคารวิศวะวัฒนะ</option>
+                  <option class="">LX Building</option>
+                  <option class="">Zoom Cloud Meetings</option>
+                  <option class="">Microsoft Teams</option>
                 </select>
                 <span v-if="this.invalidEv_Location" :class="errorText">**Please select Location**</span>
               </div>
@@ -189,11 +192,11 @@
                 <label for="start" class="" :class="labelInput">Start Event</label>
                 <div class="grid grid-cols-2 gap-x-4">
                   <div class="flex flex-col gap-y-2">
-                    <input id="startdate" type="date" v-model="Ev_StartDate" placeholder="dd-mm-yyyy" class="" :class="inputClass" />
+                    <input id="startdate" type="date" v-model="Ev_StartDate" placeholder="" class="" :class="inputClass" />
                     <span v-if="this.invalidEv_StartDate" :class="errorText">**Please choose Start Event Date**</span>
                   </div>
                   <div class="flex flex-col gap-y-2">
-                    <input id="starttime" type="time" v-model="Ev_StartTime" placeholder="dd-mm-yyyy" class="" :class="inputClass" />
+                    <input id="starttime" type="time" v-model="Ev_StartTime" placeholder="" class="" :class="inputClass" />
                     <span v-if="this.invalidEv_StartTime" :class="errorText">**Please choose Start Event Time**</span>
                   </div>
                 </div>
@@ -277,7 +280,10 @@ export default {
       errorText: {
         "text-red-500 text-xs text-left italic": true
       },
-      // image: null,
+
+      oldEvent: Object,
+      oldContact: Object,
+
 			imageshow: '',
 
       /** v-model */
@@ -301,13 +307,13 @@ export default {
 
       accountID: 0,
 
-      cname1: '',
-      cphone1: '',
-      cmail1: '',
+      cname1: "",
+      cphone1: "",
+      cmail1: "",
 
-      cname2: '',
-      cphone2: '',
-      cmail2: '',
+      cname2: "",
+      cphone2: "",
+      cmail2: "",
 
       /** v-model */
 
@@ -335,7 +341,9 @@ export default {
 		}
 	},
 	methods: {
-    
+    // submitForm(){
+    //   alert("1")
+    // },
     submitForm() {
 
       this.invalidEv_Name = this.Ev_Name === "" ? true : false;
@@ -378,8 +386,9 @@ export default {
         const eRegisString = eRegis.getFullYear() + "-" + (eRegis.getMonth()+1) + "-" + eRegis.getDate() + " " + this.hours(eRegis) + ":" + this.minutes(eRegis)
 
         const data = {
+          // eventID: this.$route.params.id,
           eventTitle: this.Ev_Name,
-          eventCover: "Event-Cover-" + this.Ev_Cover.name,
+          eventCover: this.Ev_Cover.name,
           eventShortDescription: this.Ev_ShortDesc,
           eventLongDescription: this.Ev_Description,
           eventLocation: this.Ev_Location,
@@ -401,8 +410,8 @@ export default {
           accountID: this.accountID
         }
 
-      console.log(data)
-      this.addEvent(data)
+      // console.log(data)
+      this.editEvent(data)
 
       }
     },
@@ -419,65 +428,56 @@ export default {
       return minute
     },
 
-    async addEvent(data) {
+    async editEvent(data) {
+
+      const id = this.$route.params.id
 
       let formData = new FormData()
-      formData.append("file", this.Ev_Cover, "Event-Cover-" + this.Ev_Cover.name);
-      const res = await fetch(`${this.host}/uploadImage`,{method: "POST", body: formData})
+      formData.append("file", this.Ev_Cover, this.Ev_Cover.name);
+      const res = await fetch(`${this.host}/updateImage/${id}`,{method: "PUT", body: formData})
       if (res.ok) {
-        const resp = await fetch(`${this.host}/addEvent`,{
-          method: "POST", 
+        const resp = await fetch(`${this.host}/updateEvent/${id}`,{
+          method: "PUT", 
           headers: {
             "Content-type": "application/json",
           },
           body: JSON.stringify(data)
           })
         if (resp.ok) {
-        console.log(res)
-          const respo = await fetch(`${this.host}/getEventByTitle/${this.Ev_Name}`,{method: "GET", headers: {"Content-type": "application/json",}})
-          const x = await respo.json()
-          console.log(data)
-          console.log(x)
-          const dataContact1 = {
+          const dataContact = {
             contactName: this.cname1,
             contactPhone: this.cphone1,
             contactEmail: this.cmail1,
-            eventID: x.eventID
+            eventID: this.$route.params.id
           }
-          const response = await fetch(`${this.host}/addContact`,{
-            method: "POST",
+          const resContact = await fetch(`${this.host}/editContact/${this.oldContact[0].contactID}`,{
+            method: "PUT",
+            body: JSON.stringify(dataContact),
             headers: {
               "Content-type": "application/json",
             },
-            body: JSON.stringify(dataContact1)
           })
-          if(response.ok) {
-            if(this.cname2 !== "" && this.cphone2 !== "" && this.cmail2 !== "") {
-              // ใส่ข้อมูล
-              const dataContact2 = {
-                contactName: this.cname2,
-                contactPhone: this.cphone2,
-                contactEmail: this.cmail2,
-                eventID: x.eventID
-              }
-              const response1 = await fetch(`${this.host}/addContact`,{
-                method: "POST",
-                headers: {
-                  "Content-type": "application/json",
-                },
-                body: JSON.stringify(dataContact2)
-              })
-              if (response1.ok) {
-                this.$router.push("/home")
-              }
-            } else {
-              // ไม่ใส่ข้อมูล
-              this.$router.push("/home")
-            }  
+          if(this.cname2 !== "" && this.cphone2 !== "" && this.cmail2 !== "") {
+            const dataContact1 = {
+              contactName: this.cname2,
+              contactPhone: this.cphone2,
+              contactEmail: this.cmail2,
+              eventID: this.$route.params.id
+            }
+            await fetch (`${this.host}/editContact/${this.oldContact[1].contactID}`,{
+              method: "PUT",
+              body: JSON.stringify(dataContact1),
+              headers: {
+                "Content-type": "application/json",
+              },
+            })
+          }
+          if(resContact.ok === true) {
+            this.$router.push(`/each/${this.$route.params.id}`)
           }
         }
       }
-    },
+  },
 
     async uploadPhoto(e) {
 			this.Ev_Cover = e.target.files[0];
@@ -490,6 +490,7 @@ export default {
 			console.log(this.Ev_Cover);
 			console.log(this.Ev_Cover.name);
 		},
+
     async getAccountIDFromToken() {
 			let token = localStorage.getItem('token')
 			const res = await fetch(`${this.host}/me`,{
@@ -508,9 +509,59 @@ export default {
   
 	async created() {
     await this.getAccountIDFromToken();
+
     if (localStorage.getItem('token') === null && await this.users.creators === null) {
       this.$router.push("/")
     }
-	}
+
+    const response = await fetch(`${this.host}/events/${this.$route.params.id}`,{
+      method: "GET"
+    })
+    const oldEvent = await response.json()
+    this.oldEvent = oldEvent
+
+    // const response1 = await fetch(`${this.host}/Files/${await oldEvent.eventCover}`,{
+    //   method: "GET"
+    // })
+		// const blob = await response1.blob()
+    
+    const res = await fetch(`${this.host}/eventcontact/${this.$route.params.id}`, {
+      method: "GET"
+    })
+    const oldContact = await res.json()
+    this.oldContact = oldContact
+
+    this.Ev_Name = await oldEvent.eventTitle
+    // this.Ev_Cover = null
+    // this.imageshow = 
+    this.imageshow = `${this.host}/Files/${oldEvent.eventCover}`
+    const response0 = await fetch(this.imageshow);
+		const blob = await response0.blob()
+		this.Ev_Cover = new File([blob], oldEvent.eventCover, {type: blob.type})
+    this.Ev_Description = await oldEvent.eventLongDescription
+    this.Ev_ShortDesc = await oldEvent.eventShortDescription
+    this.Ev_Cost = await oldEvent.eventCost
+    this.Ev_Location = await oldEvent.eventLocation
+    this.Ev_Type = await oldEvent.eventType
+    this.Ev_NumberOfPeople = await oldEvent.eventNumberOfPeople
+    this.Ev_Year = await oldEvent.eventYear
+    this.Ev_StartRegis = await oldEvent.eventStartRegis
+    this.Ev_EndRegis = await oldEvent.eventEndRegis
+    this.Ev_StartDate = await oldEvent.eventStartDate
+    this.Ev_StartTime = await oldEvent.eventStartTime
+    this.Ev_EndDate = await oldEvent.eventEndDate
+    this.Ev_EndTime = await oldEvent.eventEndTime
+    this.Ev_Note = await oldEvent.eventNote
+
+    this.cname1 = await oldContact[0].contactName
+    this.cphone1 = await oldContact[0].contactPhone
+    this.cmail1 = await oldContact[0].contactEmail
+
+    if( await oldContact[1] != null ) {
+      this.cname2 = await oldContact[1].contactName
+      this.cphone2 = await oldContact[1].contactPhone
+      this.cmail2 = await oldContact[1].contactEmail
+    }
+  }
 }
 </script>

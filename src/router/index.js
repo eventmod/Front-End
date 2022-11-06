@@ -1,10 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Welcome from '../views/Welcome.vue'
+import Welcome from '../views/Welcome.vue';
 import Home from '../views/Home.vue';
 import Create from "../views/CreateEvent.vue";
 import EachEvent from "../views/EachEvent.vue";
 import Profile from "../views/Profile.vue";
 import ManageSys from "../views/ManageSystem.vue";
+import EditEvent from "../views/EditEvent.vue";
+import NotSupportDevice from "../views/NotSupportDevice.vue";
+import AuthenKMUTT from "../views/LIFFAuthenKMUTT.vue";
+import Each from "../views/LIFFEach.vue";
 
 const routes = [
   {
@@ -36,6 +40,26 @@ const routes = [
     path: '/manage',
     name: 'manage system',
     component: ManageSys
+  },
+  {
+    path: '/edit/:id',
+    name: 'edit',
+    component: EditEvent
+  },
+  {
+    path: '/notsupport',
+    name: 'not support device',
+    component: NotSupportDevice
+  },
+  {
+    path: '/liffauth',
+    name: 'LIFF Authen KMUTT',
+    component: AuthenKMUTT
+  },
+  {
+    path: '/liffeach',
+    name: 'LIFF Each Event',
+    component: Each
   },
 ]
 
