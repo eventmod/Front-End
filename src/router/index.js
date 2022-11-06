@@ -8,6 +8,7 @@ import ManageSys from "../views/WEB/ManageSystem.vue";
 import EditEvent from "../views/WEB/EditEvent.vue";
 import NotSupportDevice from "../views/WEB/NotSupportDevice.vue";
 import AuthenKMUTT from "../views/LIFF/AuthenKMUTT.vue";
+import Each from "../views/LIFF/Each.vue";
 
 const routes = [
   {
@@ -54,6 +55,11 @@ const routes = [
     path: '/liffauth',
     name: 'LIFF Authen KMUTT',
     component: AuthenKMUTT
+  },
+  {
+    path: '/liffeach',
+    name: 'LIFF Each Event',
+    component: Each
   },
 ]
 
