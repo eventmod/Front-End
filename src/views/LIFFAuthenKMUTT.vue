@@ -45,9 +45,9 @@ export default {
   async created() {
     const liffId = '1657624777-ZRExJL7b'
     await liff.init({ liffId });
-    // if (!liff.isLoggedIn()) {
-    //   liff.login()
-    // }
+    if (!liff.isLoggedIn()) {
+      liff.login()
+    }
     this.userId = (await liff.getProfile()).userId
     await this.sendOTPToKMUTTMail()
     
