@@ -103,7 +103,7 @@ export default {
           lineaccUserID: this.userId,
           lineaccStudentID: this.inputStudentId,
           lineaccKmuttMail: this.inputStudentMail,
-          lineaccVerify: this.verifyStatus
+          lineaccVerify: "Verified"
         }
         const res = await fetch(`${this.host}/newLineaccount`, {
           method: "POST",
@@ -115,6 +115,20 @@ export default {
         if(res.ok) {
           liff.closeWindow()
         }
+      }
+    },
+    async checkVeriffy() {
+      const res = await fetch(`${this.host}/lineByUserID/${this.userId}`, {
+        method: "GET",
+        headers: {
+          "Content-type": "application/json",
+        },
+      })
+      const data = res.json()
+      const isVerify = data.lineaccVerify === "Verified" ? true : false;
+
+      if(isVerify) {
+        liff.closeWindow()
       }
     }
   },
