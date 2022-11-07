@@ -11,7 +11,7 @@
         <label for="inputStudentMail" class="uppercase text-violet-900 font-semibold select-none">KMUTT Student Mail</label>
         <input id="inputStudentMail" type="text" v-model="inputStudentMail" placeholder="@mail.kmutt.ac.th / @kmutt.ac.th"
           class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
-        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()">Send OTP</button><p v-if="showCountDown" class="">{{ countDown }}</p>
+        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()">Send OTP</button><span v-if="showCountDown" class="">{{ countDown }}</span>
       </div>
       <div class="">
         <label for="inputOTP" class="uppercase text-violet-900 font-semibold select-none">OTP Validation</label>
@@ -61,9 +61,9 @@ export default {
         this.otp = otpGenerator.generate(6, { alphabets: false, upperCase: false, specialChar: false });
 
         let formData = new FormData()
-        formData.append("toEmail",this.inputStudentMail)
-        formData.append("subject","OTP from EventMod")
-        formData.append("content",`Your OTP is... ${this.otp}`)
+        formData.append("toEmail", this.inputStudentMail)
+        formData.append("subject", "OTP from EventMod")
+        formData.append("content", `Your OTP is... ${this.otp}`)
 
         await fetch(`${this.host}/sendEmail`, {
           method: "POST",
