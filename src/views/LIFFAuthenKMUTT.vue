@@ -27,9 +27,10 @@ export default {
   },
   async created() {
     await liff.init({ liffId: '1657624777-GQkya04l' });
-
-    const urlParams = new URLSearchParams(window.location.search);
-    this.param = urlParams.get('param')
+    if (!liff.isLoggedIn()) {
+      liff.login()
+    }
+    this.param = (await liff.getProfile()).userId
   },
 };
 </script>
