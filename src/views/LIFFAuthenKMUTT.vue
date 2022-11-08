@@ -138,7 +138,7 @@ export default {
   async created() {
     await liff.init({ liffId: '1657624777-ZRExJL7b' });
     if (!liff.isLoggedIn()) {
-      // liff.login()
+      liff.login()
     }
     this.userId = (await liff.getProfile()).userId
   },
