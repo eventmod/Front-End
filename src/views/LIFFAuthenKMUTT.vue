@@ -71,13 +71,13 @@ export default {
           body: formData
         })
         if (res.ok) {
-          console.log("Success")
+          this.countDownTimer()
         } else {
           throw console.error();
         }
 
       }
-      this.countDownTimer()
+      
     },
 
     countDownTimer () {
