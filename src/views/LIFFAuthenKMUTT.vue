@@ -116,19 +116,19 @@ export default {
           body: JSON.stringify(data)
         })
         if(res.ok) {
-          liff.closeWindow()
+          await this.checkVerify()
         }
       }
     },
-    async checkVeriffy() {
+    async checkVerify() {
       const res = await fetch(`${this.host}/lineByUserID/${this.userId}`, {
         method: "GET",
         headers: {
           "Content-type": "application/json",
         },
       })
-      const data = res.json()
-      const isVerify = data.lineaccVerify === "Verified" ? true : false;
+      const data = await res.json()
+      const isVerify = await data.lineaccVerify === "Verified" ? true : false;
 
       if(isVerify) {
         liff.closeWindow()
@@ -141,6 +141,7 @@ export default {
       liff.login()
     }
     this.userId = (await liff.getProfile()).userId
+    await this.checkVerify()
   },
 };
 </script>
