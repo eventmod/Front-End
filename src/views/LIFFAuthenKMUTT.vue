@@ -125,7 +125,7 @@ export default {
         method: "GET",
       })
       const data = await res.json()
-      const isVerify = await data.lineaccVerify === "Verified" ? true : false;
+      const isVerify = await data.lineaccVerify == "Verified" ? true : false;
 
       if(isVerify) {
         liff.closeWindow()
@@ -137,8 +137,9 @@ export default {
     if (!liff.isLoggedIn()) {
       liff.login()
     }
-    this.userId = (await liff.getProfile()).userId
     await this.checkVerify()
+    this.userId = (await liff.getProfile()).userId
+    
   },
 };
 </script>
