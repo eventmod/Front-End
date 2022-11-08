@@ -9,9 +9,10 @@
       </div>
       <div class="">
         <label for="inputStudentMail" class="uppercase text-violet-900 font-semibold select-none">KMUTT Student Mail</label>
-        <input id="inputStudentMail" type="text" v-model="inputStudentMail" placeholder="@mail.kmutt.ac.th / @kmutt.ac.th"
+        <input id="inputStudentMail" type="email" v-model="inputStudentMail" placeholder="@mail.kmutt.ac.th / @kmutt.ac.th"
           class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
-        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()">Send OTP</button><span v-if="showCountDown" class="">{{ countDown }}</span>
+        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()">Send OTP</button>
+        <span v-if="showCountDown" class="mx-2 text-slate-400 text-xs">{{ countDown }}</span>
       </div>
       <div class="">
         <label for="inputOTP" class="uppercase text-violet-900 font-semibold select-none">OTP Validation</label>
@@ -63,15 +64,17 @@ export default {
         let formData = new FormData()
         formData.append("toEmail", this.inputStudentMail)
         formData.append("subject", "OTP from EventMod")
-        formData.append("content", `Your OTP is... ${this.otp}`)
+        formData.append("content", "Your OTP is... " + this.otp)
 
-        await fetch(`${this.host}/sendEmail`, {
+        const res = await fetch(`${this.host}/sendEmail`, {
           method: "POST",
-          headers: {
-            "Content-type": "application/json",
-          },
           body: formData
         })
+        if (res.ok) {
+          console.log("Success")
+        } else {
+          throw console.error();
+        }
 
       }
       this.countDownTimer()
