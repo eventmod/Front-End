@@ -116,7 +116,7 @@ export default {
           body: JSON.stringify(data)
         })
         if(res.ok) {
-          await this.checkVerify()
+          liff.closeWindow()
         }
       }
     },
@@ -125,7 +125,9 @@ export default {
         method: "GET",
       })
       const data = await res.json()
-      const isVerify = await data.lineaccVerify == "Verified" ? true : false;
+      console.log(data)
+      console.log(data.lineaccVerify)
+      const isVerify = await data.lineaccVerify === "Verified" ? true : false;
 
       if(isVerify) {
         liff.closeWindow()
