@@ -98,7 +98,7 @@ export default {
       this.validInputStudentMail = this.inputStudentMail === "" ? true : false;
       this.validInputOTP = this.inputOTP === "" ? true : false;
 
-      const validationOTP = (this.inputOTP === this.otp)
+      const validationOTP = this.inputOTP == this.otp ? true : false;
       const validationInput = (!this.validInputStudentId && !this.validInputStudentMail && !this.validInputOTP)
 
       if(validationOTP && validationInput) {
