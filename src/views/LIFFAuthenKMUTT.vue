@@ -139,9 +139,8 @@ export default {
     if (!liff.isLoggedIn()) {
       liff.login()
     }
-    await this.checkVerify()
     this.userId = (await liff.getProfile()).userId
-    
+    await this.checkVerify()    
   },
 };
 </script>
