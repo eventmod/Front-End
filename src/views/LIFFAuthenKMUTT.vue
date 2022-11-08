@@ -123,9 +123,6 @@ export default {
     async checkVerify() {
       const res = await fetch(`${this.host}/lineByUserID/${this.userId}`, {
         method: "GET",
-        headers: {
-          "Content-type": "application/json",
-        },
       })
       const data = await res.json()
       const isVerify = await data.lineaccVerify === "Verified" ? true : false;
