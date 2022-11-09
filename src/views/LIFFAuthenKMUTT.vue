@@ -11,7 +11,7 @@
         <label for="inputStudentMail" class="uppercase text-violet-900 font-semibold select-none">KMUTT Student Mail</label>
         <input id="inputStudentMail" type="email" v-model="inputStudentMail" placeholder="@mail.kmutt.ac.th / @kmutt.ac.th"
           class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
-        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()">Send OTP</button>
+        <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()" :disabled="isDisable">Send OTP</button>
         <span v-if="showCountDown" class="mx-2 text-slate-400 text-xs">{{ countDown }}</span>
       </div>
       <div class="">
@@ -44,6 +44,7 @@ export default {
       isAuthen: false,
       verifyStatus: "",
 
+      isDisable: false,
       countDown: 60,
       showCountDown: false,
 
@@ -81,14 +82,16 @@ export default {
     },
 
     countDownTimer () {
-      this.showCountDown = true
       if (this.countDown > 0) {
+        this.isDisable = true
+        this.showCountDown = true
         setTimeout(() => {
             this.countDown -= 1
             this.countDownTimer()
         }, 1000)
       } else {
         this.showCountDown = false
+        this.isDisable = false
       }
     },
 
