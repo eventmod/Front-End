@@ -4,20 +4,23 @@
       <div class="text-2xl text-center font-extrabold text-violet-900">Verify KMUTT Student</div>
       <div class="">
         <label for="inputStudentId" class="uppercase text-violet-900 font-semibold select-none">KMUTT Student ID</label>
+        <span v-if="this.validInputStudentId" :class="errorText" class="ri-alert-line"></span>
         <input id="inputStudentId" type="text" v-model="inputStudentId" placeholder="Student Id 11 digits..." minlength="11" maxlength="11" 
-          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
+          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" :class="{'shadow-red-400 outline outline-1 outline-red-600 focus:outline-red-600': validInputStudentId}" />
       </div>
       <div class="">
         <label for="inputStudentMail" class="uppercase text-violet-900 font-semibold select-none">KMUTT Student Mail</label>
+        <span v-if="this.validInputStudentMail" :class="errorText" class="ri-alert-line"></span>
         <input id="inputStudentMail" type="email" v-model="inputStudentMail" placeholder="@mail.kmutt.ac.th / @kmutt.ac.th"
-          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
+          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" :class="{'shadow-red-400 outline outline-1 outline-red-600 focus:outline-red-600': validInputStudentMail}" />
         <button type="button" class="text-sm" @click="sendOTPToKMUTTMail()" :disabled="isDisable">Send OTP</button>
         <span v-if="showCountDown" class="mx-2 text-slate-400 text-xs">{{ countDown }}</span>
       </div>
       <div class="">
         <label for="inputOTP" class="uppercase text-violet-900 font-semibold select-none">OTP Validation</label>
+        <span v-if="this.validInputOTP" :class="errorText" class="ri-alert-line"></span>
         <input id="inputOTP" type="text" v-model="inputOTP" placeholder="OTP"
-          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" />
+          class="rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100 w-full" :class="{'shadow-red-400 outline outline-1 outline-red-600 focus:outline-red-600': validInputOTP}" />
       </div>
       <div class="">
         <input type="button" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 w-full py-2 rounded-full shadow-lg" value="Verify" @click="collectAccount()">
@@ -34,6 +37,11 @@ import otpGenerator from "otp-generators";
 export default {
   data() {
     return {
+
+      errorText: {
+        "text-red-500 text-sm text-left italic mx-1": true
+      },
+
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
 
       userId: "",
@@ -56,7 +64,8 @@ export default {
   methods: {
     async sendOTPToKMUTTMail() {
       
-      this.validInputStudentMail = this.inputStudentMail === "" ? true : false;
+      this.validInputStudentMail = this.inputStudentMail === "" || !this.inputStudentMail.includes(".kmutt.ac.th") ? true : false;
+
 
       if(!this.validInputStudentMail) {
 
