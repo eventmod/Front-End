@@ -64,7 +64,7 @@ export default {
   methods: {
     async sendOTPToKMUTTMail() {
       
-      this.validInputStudentMail = this.inputStudentMail === "" || !this.inputStudentMail.includes(".kmutt.ac.th") ? true : false;
+      this.validInputStudentMail = this.inputStudentMail === "" || !this.inputStudentMail.includes("kmutt.ac.th") ? true : false;
 
 
       if(!this.validInputStudentMail) {
