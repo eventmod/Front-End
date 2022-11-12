@@ -130,7 +130,7 @@ export default {
 	async created() {
     await this.getUserFromToken();
     if (localStorage.getItem('token') === null && await this.user.admins === null) {
-      this.$router.push("/")
+      await this.$router.push("/")
     }
     this.accounts = await this.fetchAccount()
     this.admins = await this.fetchAdmin()

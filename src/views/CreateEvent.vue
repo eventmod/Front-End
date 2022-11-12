@@ -522,7 +522,7 @@ export default {
 	async created() {
     await this.getAccountIDFromToken();
     if (localStorage.getItem('token') === null && await this.users.creators === null) {
-      this.$router.push("/")
+      await this.$router.push("/")
     }
 	}
 }

@@ -575,9 +575,9 @@ export default {
       const oldEvent = this.fetchEvent()
       const oldContact = this.fetchContact()
       if (await this.users.creators.creatorID !== await oldEvent.accountID) {
-        this.$router.push("/home")
+        await this.$router.push("/home")
       } else {
-        this.assignOldData(oldEvent, oldContact)
+        await this.assignOldData(oldEvent, oldContact)
       }
     }
   }

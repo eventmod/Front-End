@@ -58,7 +58,7 @@ export default {
 	async created() {
 		await this.getUserFromToken();
     if (localStorage.getItem('token') === null) {
-      this.$router.push("/")
+      await this.$router.push("/")
     } else {
 			if (await this.user.creators !== null && await this.user.admins === null) {
 				this.isCreator = true

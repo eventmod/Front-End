@@ -253,12 +253,12 @@ export default {
 	async created() {
     await this.getAccountIDFromToken();
     if (localStorage.getItem('token') === null) {
-      this.$router.push("/")
+      await this.$router.push("/")
     } else {
       this.event = await this.fetchEvent();
       this.contact = await this.fetchContact();
       if (await this.users.creators.creatorID !== await this.event.accountID) {
-        this.$router.push("/home")
+        await this.$router.push("/home")
       }
     }
     
