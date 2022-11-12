@@ -1,8 +1,9 @@
 <template>
   <div class="">
     <NavBar class="overflow-hidden fixed top-0 w-full" />
-    <div class="my-11 pt-12 mx-72">
-      <span class="text-violet-900 font-bold text-2xl">Edit Event ({{this.oldEvent.eventTitle}})</span>
+    <div class="flex my-11 pt-12 mx-72">
+      <span class="text-violet-900 font-bold text-2xl">Edit Event ({{ this.oldEvent.eventTitle }})</span>
+      <button class="ml-auto my-auto" @click="cancel()">Cancel</button>
     </div>
     <form @submit.prevent="submitForm">
       <div class="-mt-3 mx-72 px-4 py-3 bg-white rounded-xl shadow-xl">
@@ -263,7 +264,7 @@ export default {
 	data() {
 		return {
       stepPage: 1,
-      users: null,
+      users: {},
 
       inputClass: {
         "rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100": true,
@@ -277,9 +278,12 @@ export default {
 
 			imageshow: '',
 
+      oldEvent: {},
+      oldContact: [],
+
       /** v-model */
       eventName: '',
-      eventCover: null,
+      eventCover: '',
       eventDescription: '',
       eventShortDesc: '',
       eventCost: 0,
@@ -340,9 +344,6 @@ export default {
 		}
 	},
 	methods: {
-    // submitForm(){
-    //   alert("1")
-    // },
     submitForm() {
 
       this.invalideventName = this.eventName === "" ? true : false;
@@ -416,6 +417,10 @@ export default {
       this.editEvent(data)
 
       }
+    },
+
+    cancel () {
+      this.$router.push(`/each/${this.$route.params.id}`)
     },
 
     hours(x) {
@@ -534,7 +539,7 @@ export default {
 
     async assignOldData(oldEvent, oldContact) {
       this.eventName = await oldEvent.eventTitle
-      this.imageshow = `${this.host}/Files/${oldEvent.eventCover}`
+      this.imageshow = `${this.host}/Files/${await oldEvent.eventCover}`
       const response0 = await fetch(this.imageshow);
       const blob = await response0.blob()
       this.eventCover = new File([blob], oldEvent.eventCover, {type: blob.type})
@@ -572,12 +577,12 @@ export default {
     if (localStorage.getItem('token') === null && await this.users.creators === null) {
       this.$router.push("/")
     } else {
-      const oldEvent = this.fetchEvent()
-      const oldContact = this.fetchContact()
-      if (await this.users.creators.creatorID !== await oldEvent.accountID) {
-        await this.$router.push("/home")
+      this.oldEvent = await this.fetchEvent()
+      this.oldContact = await this.fetchContact()
+      if (await this.users.creators.creatorID === await this.oldEvent.accountID) {
+        await this.assignOldData(this.oldEvent, this.oldContact)
       } else {
-        await this.assignOldData(oldEvent, oldContact)
+        this.$router.push("/home")
       }
     }
   }
