@@ -23,7 +23,10 @@ export default {
 		return {
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
       user: '',
-      userDetail: ''
+      userDetail: '',
+
+			isAdmin: false,
+			isCreator: false,
 		}
 	},
 	methods: {
@@ -37,7 +40,7 @@ export default {
 			})
 			if (res.ok) {
 				const user = await res.json()
-        return user;
+        this.user = user
 			}
 		},
 
@@ -51,12 +54,22 @@ export default {
       return response.json();
     },
 	},
+
 	async created() {
+		await this.getUserFromToken();
     if (localStorage.getItem('token') === null) {
-      this.$router.push("/")
-    }
-    this.user = await this.getUserFromToken();
-    // this.userDetail = await this.fetchAdmin();
+      await this.$router.push("/")
+    } else {
+			if (await this.user.creators !== null && await this.user.admins === null) {
+				this.isCreator = true
+				this.isAdmin = false
+				this.userDetail = this.fetchCreator()
+			} else if (await this.user.admins !== null && await this.user.creators === null) {
+				this.isAdmin = true
+				this.isCreator = false
+				this.userDetail = this.fetchAdmin()
+			}
+		}
 	}
 };
 </script>

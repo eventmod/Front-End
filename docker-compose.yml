@@ -1,11 +1,11 @@
-version: "3"
+version: "3.1"
 services:
     frontend-prd:
         container_name: frontend-prd
         build: .
         image: ghcr.io/eventmod/eventmod-frontend:prd
         env_file:
-            - ./.env
+            - ./.env.production
         ports: 
             - "8080:8080"
 
