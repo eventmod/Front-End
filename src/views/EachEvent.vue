@@ -155,6 +155,7 @@ export default {
 		return {
       event: [],
       contact: [],
+      users: {},
 
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
 
@@ -234,8 +235,23 @@ export default {
       var ampm = x.getHours() >= 12 ? 'pm' : 'am';
       return ampm
     },
+
+    getAccountIDFromToken: async function() {
+			let token = localStorage.getItem('token')
+			const res = await fetch(`${this.host}/me`,{
+				method: "GET",
+				headers: {
+						"Authorization": token,
+					},
+			})
+			if (res.ok) {
+				const user = await res.json()
+        this.users = user
+			}
+		},
 	},
 	async created() {
+    await this.getAccountIDFromToken();
     if (localStorage.getItem('token') === null) {
       this.$router.push("/")
     } else {

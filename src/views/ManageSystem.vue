@@ -89,7 +89,7 @@ export default {
 			})
 			if (res.ok) {
 				const user = await res.json()
-        return user;
+        this.user = user;
 			}
 		},
 
@@ -124,9 +124,11 @@ export default {
         }
       }
     },
+
 	},
+
 	async created() {
-    this.user = await this.getUserFromToken();
+    await this.getUserFromToken();
     if (localStorage.getItem('token') === null && await this.user.admins === null) {
       this.$router.push("/")
     }

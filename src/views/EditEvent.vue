@@ -501,7 +501,7 @@ export default {
 			console.log(this.eventCover.name);
 		},
 
-    async getAccountIDFromToken() {
+    getAccountIDFromToken: async function() {
 			let token = localStorage.getItem('token')
 			const res = await fetch(`${this.host}/me`,{
 				method: "GET",
