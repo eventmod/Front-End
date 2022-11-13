@@ -378,16 +378,16 @@ export default {
       if (checkForm) {
 
         const stDate = new Date(this.eventStartDate)
-        const stDateString = stDate.getFullYear() + "-" + (stDate.getMonth()+1) + "-" + stDate.getDate()
+        const stDateString = stDate.getFullYear() + "-" + (stDate.getMonth()+1) + "-" + this.date(stDate)
 
         const eDate = new Date(this.eventEndDate)
-        const eDateString = eDate.getFullYear() + "-" + (eDate.getMonth()+1) + "-" + eDate.getDate()
+        const eDateString = eDate.getFullYear() + "-" + (eDate.getMonth()+1) + "-" + this.date(eDate)
 
         const stRegis = new Date(this.eventStartRegis)
-        const stRegisString = stRegis.getFullYear() + "-" + (stRegis.getMonth()+1) + "-" + stRegis.getDate() + " " + this.hours(stRegis) + ":" + this.minutes(stRegis)
+        const stRegisString = stRegis.getFullYear() + "-" + (stRegis.getMonth()+1) + "-" + this.date(stRegis) + " " + this.hours(stRegis) + ":" + this.minutes(stRegis)
 
         const eRegis = new Date(this.eventEndRegis)
-        const eRegisString = eRegis.getFullYear() + "-" + (eRegis.getMonth()+1) + "-" + eRegis.getDate() + " " + this.hours(eRegis) + ":" + this.minutes(eRegis)
+        const eRegisString = eRegis.getFullYear() + "-" + (eRegis.getMonth()+1) + "-" + this.date(eRegis) + " " + this.hours(eRegis) + ":" + this.minutes(eRegis)
 
         const data = {
           eventTitle: this.eventName,
@@ -425,6 +425,12 @@ export default {
       var minute = x.getMinutes()
       minute = minute <=9 ? '0' + minute : minute;
       return minute
+    },
+
+    date(x) {
+      var date = x.getDate()
+      date = date <=9 ? '0' + date : date;
+      return date
     },
 
     async addEvent(data) {

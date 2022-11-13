@@ -173,7 +173,9 @@ export default {
     },
 
     date(x) {
-      return x.getDate()
+      var date = x.getDate()
+      date = date <=9 ? '0' + date : date;
+      return date
     },
 
     hours(x) {
