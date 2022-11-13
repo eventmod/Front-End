@@ -298,6 +298,7 @@ export default {
       eventStartTime: '',
       eventEndDate: '',
       eventEndTime: '',
+      eventJoinLink: null,
       eventNote: null,
 
       accountID: 0,
@@ -409,6 +410,7 @@ export default {
           eventCost: this.eventCost,
           eventYear: this.eventYear,
           eventType: this.eventType,
+          eventJoinLink: this.eventJoinLink,
           eventNote: this.eventNote,
           accountID: this.accountID
         }
