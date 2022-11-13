@@ -4,7 +4,7 @@
     <div class="flex flex-col bg-white mx-80 z-20 rounded-lg shadow-lg px-10 py-12 gap-y-8">
       <div class="flex">
         <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
-        <span class="ml-auto text-4xl space-x-4 my-auto">
+        <span v-if="isOwnEvent" class="ml-auto text-4xl space-x-4 my-auto">
           <span class="ri-edit-line text-gray-500 hover:text-green-500" @click="edit()"/>
           <span class="ri-delete-bin-6-line text-gray-500 hover:text-red-500" @click="deleteEvent()"/>
         </span>
@@ -159,7 +159,9 @@ export default {
 
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
 
-      showModal: false
+      showModal: false,
+
+      isOwnEvent: true,
 		}
 	},
 	methods: {
@@ -216,7 +218,9 @@ export default {
     },
 
     date(x) {
-      return x.getDate()
+      var date = x.getDate()
+      date = date <=9 ? '0' + date : date;
+      return date
     },
 
     hours(x) {

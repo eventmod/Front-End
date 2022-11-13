@@ -139,7 +139,7 @@ export default {
       cname: "",
       toe: "",
 
-      userLogin: null,
+      userLogin: {},
 
 		}
 	},
@@ -173,7 +173,9 @@ export default {
     },
 
     date(x) {
-      return x.getDate()
+      var date = x.getDate()
+      date = date <=9 ? '0' + date : date;
+      return date
     },
 
     hours(x) {
@@ -202,14 +204,10 @@ export default {
 					},
 			})
       // console.log(res)
-      // console.log(res.ok)
 			if (res.ok) {
 				const user = await res.json()
-        // console.log(user)
         return user;
-				// this.userLogin = user
-        // const username = await user.username
-        // this.username = username
+
 			}
 		},
 
@@ -219,7 +217,6 @@ export default {
       this.$router.push("/")
     }
     this.userLogin = await this.getUserFromToken();
-    // console.log(await this.userLogin)
     if (await this.userLogin.admins != null) {
       this.events = await this.fetchEvent();
     } else if (await this.userLogin.creators != null) {
