@@ -4,7 +4,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY ./ .
-RUN npm run build-prd
+RUN npm run build
 
 # production stage
 FROM nginx as production-stage
