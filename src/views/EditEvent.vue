@@ -460,6 +460,7 @@ export default {
             contactRole: this.crole1,
             eventID: this.$route.params.id
           }
+          console.log(dataContact)
           const resContact = await fetch(`${this.host}/editContact/${this.oldContact[0].contactID}`,{
             method: "PUT",
             body: JSON.stringify(dataContact),
