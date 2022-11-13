@@ -455,6 +455,7 @@ export default {
             contactName: this.cname1,
             contactPhone: this.cphone1,
             contactEmail: this.cmail1,
+            contactRole: this.crole1,
             eventID: this.$route.params.id
           }
           const resContact = await fetch(`${this.host}/editContact/${this.oldContact[0].contactID}`,{
@@ -469,6 +470,7 @@ export default {
               contactName: this.cname2,
               contactPhone: this.cphone2,
               contactEmail: this.cmail2,
+              contactRole: this.crole2,
               eventID: this.$route.params.id
             }
             const resContact1 = await fetch (`${this.host}/editContact/${this.oldContact[1].contactID}`,{
@@ -481,16 +483,16 @@ export default {
             if(resContact1.ok) {
               this.$router.push(`/each/${this.$route.params.id}`)
             } else {
-              alert(resContact1.status + "\n" + resContact1.statusText)
+              alert("Contact2: " + resContact1.status + "\n" + resContact1.statusText)
             }
           } else {
-            alert(resContact.status + "\n" + resContact.statusText)
+            alert("Contact1: " + resContact.status + "\n" + resContact.statusText)
           }
         } else {
-          alert(resp.status + "\n" + resp.statusText)
+          alert("Event:" + resp.status + "\n" + resp.statusText)
         }
       } else {
-        alert(res.status + "\n" + res.statusText)
+        alert("Image" + res.status + "\n" + res.statusText)
       }
   },
 
