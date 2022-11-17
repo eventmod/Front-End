@@ -10,7 +10,7 @@
         </span>
       </div>
       <!-- <span class="font-normal text-sm text-gray-400 -mt-4">3 May 2022</span> -->
-      <img :src="`${host}/Files/${event.eventCover}`" class="w-full rounded-lg mx-auto object-cover" />
+      <img :src="this.imageCover" class="w-full rounded-lg mx-auto object-cover" />
       <div class="text-justify">
         {{ event.eventLongDescription }}
       </div>
@@ -157,6 +157,8 @@ export default {
       contact: [],
       users: {},
 
+      imageCover: '',
+
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
 
       showModal: false,
@@ -261,8 +263,11 @@ export default {
     } else {
       this.event = await this.fetchEvent();
       this.contact = await this.fetchContact();
-      if (await this.users.creators.creatorID !== await this.event.accountID) {
-        await this.$router.push("/home")
+      this.imageCover = `${this.host}/Files/${this.event.eventCover}`
+      if (await this.users.admins === null) {
+        if (await this.users.creators.creatorID !== await this.event.accountID) {
+          await this.$router.push("/home")
+        }
       }
     }
     

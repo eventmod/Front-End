@@ -16,9 +16,9 @@
       </div>
       
       <!-- Search Box -->
-      <div class="grid grid-cols-12 w-full gap-y-6 gap-x-4">
+      <!-- <div class="grid grid-cols-12 w-full gap-y-6 gap-x-4"> -->
         <!-- First Row -->
-        <div class="col-span-2 justify-self-start">
+        <!-- <div class="col-span-2 justify-self-start">
           <select class="h-12 w-36" :class="inputClass" v-model="status">
             <option class="">Activate</option>
             <option class="">Deactivate</option>
@@ -33,11 +33,11 @@
             <span class="ri-equalizer-line"></span>
             <span class="" @click="this.showFilters = !this.showFilters">Filters</span>
           </button>
-        </div>
+        </div> -->
         <!-- First Row -->
 
         <!-- Second Row -->
-        <div v-if="showFilters" class="col-span-3">
+        <!-- <div v-if="showFilters" class="col-span-3">
           <label class="" :class="labelInput">Creator Name</label>
           <select class="h-8 w-full" :class="inputClass" v-model="cname">
             <option class="">ชมรมติว</option>
@@ -55,9 +55,9 @@
             <option class="">Online</option>
             <option class="">Onsite</option>
           </select>
-        </div>
+        </div> -->
         <!-- Second Row -->
-      </div>
+      <!-- </div> -->
       <!-- Search Box-->
 
       <!-- Each Event Component -->
