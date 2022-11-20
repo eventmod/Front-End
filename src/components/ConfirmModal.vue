@@ -31,17 +31,13 @@ export default {
 
 		},
 	props: {
-		e: {
-			type: Object,
-			require: true,
-		}
+
 	},
 	emits: [
 		"confirm"
 	],
 	data() {
 		return {
-			hosts: process.env.VUE_APP_MASKAWA_HOST,
 		};
 	},
 	methods: {

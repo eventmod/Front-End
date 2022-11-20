@@ -126,6 +126,11 @@
     <confirm-modal @confirm="confirm" />
     <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
   </div>
+
+  <div v-if="showStatusModal">
+    <status-modal :status="this.status" />
+    <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+  </div>
 </template>
 
 <style>
@@ -140,11 +145,14 @@
 // @ is an alias to /src
 
 import ConfirmModal from '../components/ConfirmModal.vue';
+import StatusModal from '../components/StatusModal.vue';
+
 
 export default {
   name: 'Each Event',
   components: {
     ConfirmModal,
+    StatusModal,
   },
 	props: {
 
@@ -163,6 +171,9 @@ export default {
 
       showModal: false,
 
+      showStatusModal: false,
+      status: 0,
+
       isOwnEvent: true,
 		}
 	},
@@ -176,7 +187,9 @@ export default {
           method: "DELETE",
         })
         if(res.ok) {
-          await this.$router.push("/home")
+          this.showStatusModal = true
+          this.status = 1
+          setTimeout( () => this.$router.push("/home"), 1000);
         }
       }
     },
@@ -256,6 +269,7 @@ export default {
 			}
 		},
 	},
+  
 	async created() {
     await this.getAccountIDFromToken();
     if (localStorage.getItem('token') === null) {
