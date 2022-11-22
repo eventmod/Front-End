@@ -121,7 +121,7 @@
               <!-- First Day Recruitment -->
               <div id="first_recruitment" class="flex flex-col gap-y-2">
                 <label for="firstdtre" class="" :class="labelInput">First Day For Recruitment</label>
-                <input id="firstdtre" type="datetime-local" v-model="eventStartRegis" placeholder="" class="" :class="inputClass" />
+                <input id="firstdtre" type="datetime-local" v-model="eventStartRegis" placeholder="" class="" :class="inputClass" @change="changeFirstRegis()" />
                 <span v-if="this.invalideventStartRegis" :class="errorText">**Please choose First Day Recruitment**</span>
               </div>
               <!-- First Day Recruitment -->
@@ -187,7 +187,7 @@
                 <label for="start" class="" :class="labelInput">Start Event</label>
                 <div class="grid grid-cols-2 gap-x-4">
                   <div class="flex flex-col gap-y-2">
-                    <input id="startdate" type="date" v-model="eventStartDate" placeholder="" class="" :class="inputClass" />
+                    <input id="startdate" type="date" v-model="eventStartDate" placeholder="" class="" :class="inputClass" @change="changeStartDate()" />
                     <span v-if="this.invalideventStartDate" :class="errorText">**Please choose Start Event Date**</span>
                   </div>
                   <div class="flex flex-col gap-y-2">
@@ -244,17 +244,24 @@
       </div>
     </form>
 
+    <div v-if="showModal">
+      <status-modal :status="this.status" />
+      <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+    </div>
+
     <Footer class="mt-40 w-full" />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
+import StatusModal from '../components/StatusModal.vue'
+
 
 export default {
   name: 'Create Event',
   components: {
-    
+    StatusModal
   },
 	props: {
 
@@ -265,6 +272,9 @@ export default {
 		return {
       stepPage: 1,
       users: {},
+
+      showModal: false,
+      status: 0,
 
       inputClass: {
         "rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100": true,
@@ -484,18 +494,28 @@ export default {
               },
             })
             if(resContact1.ok) {
-              this.$router.push(`/each/${this.$route.params.id}`)
+              this.showModal = true
+              this.status = 1
+              setTimeout( () => this.$router.push(`/each/${this.$route.params.id}`), 1000);
             } else {
-              alert("Contact2: " + resContact1.status + "\n" + resContact1.statusText)
+              this.showModal = true
+              this.status = 0
+              setTimeout( () => this.$router.push(`/each/${this.$route.params.id}`), 1000);
             }
           } else {
-            alert("Contact1: " + resContact.status + "\n" + resContact.statusText)
+            this.showModal = true
+            this.status = 0
+            setTimeout( () => this.$router.push(`/each/${this.$route.params.id}`), 1000);
           }
         } else {
-          alert("Event:" + resp.status + "\n" + resp.statusText)
+          this.showModal = true
+          this.status = 0
+          setTimeout( () => this.$router.push(`/each/${this.$route.params.id}`), 1000);
         }
       } else {
-        alert("Image" + res.status + "\n" + res.statusText)
+        this.showModal = true
+        this.status = 0
+        setTimeout( () => this.$router.push(`/each/${this.$route.params.id}`), 1000);
       }
   },
 
@@ -572,7 +592,17 @@ export default {
       this.cphone2 = await oldContact[1].contactPhone
       this.cmail2 = await oldContact[1].contactEmail
       this.crole2 = await oldContact[1].contactRole
-    }
+    },
+
+    async changeFirstRegis() {
+      this.eventEndRegis = ''
+      document.getElementById('lastdtre').setAttribute('min', this.eventStartRegis)
+    },
+
+    async changeStartDate() {
+      this.eventEndDate = ''
+      document.getElementById('enddate').setAttribute('min', this.eventStartDate)
+    },
 
 	},
   

@@ -120,7 +120,7 @@
               <!-- First Day Recruitment -->
               <div id="first_recruitment" class="flex flex-col gap-y-2">
                 <label for="firstdtre" class="" :class="labelInput">First Day For Recruitment</label>
-                <input id="firstdtre" type="datetime-local" v-model="eventStartRegis" placeholder="" class="" :class="inputClass" />
+                <input id="firstdtre" type="datetime-local" v-model="eventStartRegis" placeholder="" class="" :class="inputClass" @change="changeFirstRegis()" />
                 <span v-if="this.invalideventStartRegis" :class="errorText">**Please choose First Day Recruitment**</span>
               </div>
               <!-- First Day Recruitment -->
@@ -186,7 +186,7 @@
                 <label for="start" class="" :class="labelInput">Start Event</label>
                 <div class="grid grid-cols-2 gap-x-4">
                   <div class="flex flex-col gap-y-2">
-                    <input id="startdate" type="date" v-model="eventStartDate" placeholder="dd-mm-yyyy" class="" :class="inputClass" />
+                    <input id="startdate" type="date" v-model="eventStartDate" placeholder="dd-mm-yyyy" class="" :class="inputClass" @change="changeStartDate()" />
                     <span v-if="this.invalideventStartDate" :class="errorText">**Please choose Start Event Date**</span>
                   </div>
                   <div class="flex flex-col gap-y-2">
@@ -211,12 +211,22 @@
                   </div>
                 </div>
               </div>
-                <!-- End -->
+              <!-- End -->
               
+              <!-- Link -->
+              <div id="link" class="flex flex-col gap-y-2">
+                <div class="">
+                  <label for="link" class="" :class="labelInput">Link To Join </label>
+                  <span class="text-violet-900 font-medium select-none text-xs">(Fill When Joining Out of the System)</span>
+                </div>
+                <input id="link" type="text" v-model="eventJoinLink" placeholder="URI" :class="inputClass" />
+              </div>
+              <!-- Link -->
+
               <!-- Note -->
               <div id="note" class="flex flex-col gap-y-2">
                 <label for="note" class="" :class="labelInput">Note ...</label>
-                <textarea id="note" v-model="eventNote" placeholder=". . . . . . . . ." class="resize-none rounded-md focus:outline-none py-1 px-2 shadow-md bg-gray-100" style="height: 29rem;" />
+                <textarea id="note" v-model="eventNote" placeholder=". . . . . . . . ." class="resize-none rounded-md focus:outline-none py-1 px-2 shadow-md bg-gray-100" style="height: 23rem;" />
               </div>
               <!-- Note -->
             </div>
@@ -241,6 +251,10 @@
         </div>
         <!-- Form Step 2 -->
       </div>
+      <div v-if="showModal">
+        <status-modal :status="this.status" />
+        <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+      </div>
     </form>
 
     <Footer class="mt-40 w-full" />
@@ -249,11 +263,12 @@
 
 <script>
 // @ is an alias to /src
+import StatusModal from '../components/StatusModal.vue'
 
 export default {
   name: 'Create Event',
   components: {
-    
+    StatusModal,
   },
 	props: {
 
@@ -262,8 +277,11 @@ export default {
 	],
 	data() {
 		return {
-      stepPage: 1,
+      stepPage: 2,
       users: null,
+
+      showModal: false,
+      status: 0,
 
       inputClass: {
         "rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100": true,
@@ -294,6 +312,7 @@ export default {
       eventStartTime: '',
       eventEndDate: '',
       eventEndTime: '',
+      eventJoinLink: null,
       eventNote: null,
 
       accountID: 0,
@@ -405,6 +424,7 @@ export default {
           eventCost: this.eventCost,
           eventYear: this.eventYear,
           eventType: this.eventType,
+          eventJoinLink: this.eventJoinLink,
           eventNote: this.eventNote,
           accountID: this.accountID
         }
@@ -431,6 +451,16 @@ export default {
       var date = x.getDate()
       date = date <=9 ? '0' + date : date;
       return date
+    },
+
+    async changeFirstRegis() {
+      this.eventEndRegis = ''
+      document.getElementById('lastdtre').setAttribute('min', this.eventStartRegis)
+    },
+
+    async changeStartDate() {
+      this.eventEndDate = ''
+      document.getElementById('enddate').setAttribute('min', this.eventStartDate)
     },
 
     async addEvent(data) {
@@ -482,18 +512,29 @@ export default {
               body: JSON.stringify(dataContact2)
             })
             if (resContact1.ok) {
-              this.$router.push("/home")
+              this.showModal = true
+              this.status = 1
+              setTimeout( () => this.$router.push("/home"), 1000);
+              
             } else {
-              alert(resContact1.status + "\n" + resContact1.statusText)
+              this.showModal = true
+              this.status = 0
+              setTimeout( () => location.reload(), 1000);
             }
           } else {
-            alert(resContact.status + "\n" + resContact.statusText)
+            this.showModal = true
+            this.status = 0
+            setTimeout( () => location.reload(), 1000);
           }
         } else {
-          alert(resp.status + "\n" + resp.statusText)
+          this.showModal = true
+          this.status = 0
+          setTimeout( () => location.reload(), 1000);
         }
       } else {
-        alert(res.status + "\n" + res.statusText)
+        this.showModal = true
+        this.status = 0
+        setTimeout( () => location.reload(), 1000);
       }
     },
 

@@ -48,6 +48,11 @@
       <div class="opacity-25 fixed inset-0 z-40 bg-black"></div>
     </div>
 
+    <div v-if="showModal">
+      <status-modal :status="this.status" />
+      <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+    </div>
+
     <Footer class="mt-40 w-full" />
   </div>
 </template>
@@ -55,10 +60,13 @@
 <script>
 
 import NewAccount from '../components/NewAccountModal.vue'
+import StatusModal from '../components/StatusModal.vue'
+
 
 export default {
 	components: {
     NewAccount,
+    StatusModal,
 	},
 	props: {
 
@@ -76,6 +84,9 @@ export default {
       creators: '',
 
       inputSearchCreator: '',
+
+      showModal: false,
+      status: 0,
 		}
 	},
 	methods: {
@@ -109,18 +120,32 @@ export default {
     },
 
     async resetPassword(accountID) {
-      alert(accountID)
+      let formData = new FormData()
+      formData.append("id", accountID)
+      const response = await fetch(`${this.host}/resetPassword`,{method: "PUT", body: formData})
+      if (response.ok) {
+        this.showModal = true
+        this.status = 1
+        setTimeout( () => location.reload(), 1000);
+      } else {
+        this.showModal = true
+        this.status = 0
+        setTimeout( () => location.reload(), 1000);
+      }
     },
 
     async deleteAccount(creatorID, accountID) {
-      console.log(creatorID)
-      console.log(accountID)
       const res = await fetch(`${this.host}/delCreator/${creatorID}`,{method: "DELETE"})
       if (res.ok) {
         const response = await fetch(`${this.host}/delAccount/${accountID}`,{method: "DELETE"})
         if (response.ok) {
+          this.showModal = true
+          this.status = 1
 					setTimeout( () => location.reload(), 1000);
-
+        } else {
+          this.showModal = true
+          this.status = 0
+					setTimeout( () => location.reload(), 1000);
         }
       }
     },

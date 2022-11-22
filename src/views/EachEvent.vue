@@ -2,15 +2,9 @@
   <div id="aa" class="Each Event pt-52">
     <NavBar class="overflow-hidden fixed top-0 w-full z-10" />
     <div class="flex flex-col bg-white mx-80 z-20 rounded-lg shadow-lg px-10 py-12 gap-y-8">
-      <div class="flex">
-        <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
-        <span v-if="isOwnEvent" class="ml-auto text-4xl space-x-4 my-auto">
-          <span class="ri-edit-line text-gray-500 hover:text-green-500" @click="edit()"/>
-          <span class="ri-delete-bin-6-line text-gray-500 hover:text-red-500" @click="deleteEvent()"/>
-        </span>
-      </div>
+      <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
       <!-- <span class="font-normal text-sm text-gray-400 -mt-4">3 May 2022</span> -->
-      <img :src="`${host}/Files/${event.eventCover}`" class="w-full rounded-lg mx-auto object-cover" />
+      <img :src="this.imageCover" class="w-full rounded-lg mx-auto object-cover" />
       <div class="text-justify">
         {{ event.eventLongDescription }}
       </div>
@@ -112,18 +106,45 @@
         <span class="font-bold">Contact (Name and Phone Number)</span>
         <div v-for="c in contact" :key="c.contactID" class="grid grid-cols-12 gap-x-2">
           <span class="col-span-3">{{ c.contactName }}</span>
-          <span class="col-span-3">({{ c.contactPhone }})</span>
+          <span class="col-span-3">Phone: {{ c.contactPhone }}</span>
           <span class="col-span-6">Email: {{ c.contactEmail }}</span>
-
         </div>
       </div>
       <!-- Contact -->
+
+      <div v-if="isOwnEvent" class="grid grid-cols-3 gap-x-8 text-4xl my-6">
+        <button type="button" class="text-white bg-gradient-to-r from-green-500 to-green-400 
+        hover:from-green-400 hover:to-green-300 hover:text-black w-full py-2 rounded-full shadow-lg text-lg uppercase" @click="edit()">
+          <span class="ri-edit-line"/>
+          Edit
+        </button>
+        <button type="button" class="text-white bg-gradient-to-r from-orange-400 to-orange-300 
+        hover:from-orange-300 hover:to-orange-200 hover:text-black w-full py-2 rounded-full shadow-lg text-lg uppercase" @click="showParticipant = true">
+          <span class="ri-file-list-line"/>
+          Show Participants
+        </button>
+        <button type="button" class="text-white bg-gradient-to-r from-red-500 to-red-400 
+        hover:from-red-400 hover:to-red-300 hover:text-black w-full py-2 rounded-full shadow-lg text-lg uppercase" @click="deleteEvent()">
+          <span class="ri-delete-bin-6-line"/>
+          Delete
+        </button>
+      </div>
       
     </div>
     <Footer class="mt-40 w-full" />
   </div>
   <div v-if="showModal">
     <confirm-modal @confirm="confirm" />
+    <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+  </div>
+
+  <div v-if="showStatusModal">
+    <status-modal :status="this.status" />
+    <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+  </div>
+
+  <div v-if="showParticipant">
+    <event-joined @close="showParticipant=false" :lineAccount="this.event.eventsJoined" />
     <div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
   </div>
 </template>
@@ -140,11 +161,16 @@
 // @ is an alias to /src
 
 import ConfirmModal from '../components/ConfirmModal.vue';
+import StatusModal from '../components/StatusModal.vue';
+import EventJoined from '../components/EventsJoined.vue';
+
 
 export default {
   name: 'Each Event',
   components: {
     ConfirmModal,
+    StatusModal,
+    EventJoined,
   },
 	props: {
 
@@ -153,15 +179,22 @@ export default {
 	],
 	data() {
 		return {
-      event: [],
+      event: {},
       contact: [],
       users: {},
+
+      imageCover: '',
 
       host: process.env.VUE_APP_EVENTMOD_HOST + "/api",
 
       showModal: false,
 
-      isOwnEvent: true,
+      showStatusModal: false,
+      status: 0,
+
+      showParticipant: false,
+
+      isOwnEvent: false,
 		}
 	},
 	methods: {
@@ -174,7 +207,9 @@ export default {
           method: "DELETE",
         })
         if(res.ok) {
-          await this.$router.push("/home")
+          this.showStatusModal = true
+          this.status = 1
+          setTimeout( () => this.$router.push("/home"), 1000);
         }
       }
     },
@@ -201,6 +236,10 @@ export default {
 
     async deleteEvent() {
       this.showModal = true
+    },
+
+    async showList() {
+      alert("list")
     },
 
     day(x) {
@@ -254,6 +293,7 @@ export default {
 			}
 		},
 	},
+  
 	async created() {
     await this.getAccountIDFromToken();
     if (localStorage.getItem('token') === null) {
@@ -261,8 +301,13 @@ export default {
     } else {
       this.event = await this.fetchEvent();
       this.contact = await this.fetchContact();
-      if (await this.users.creators.creatorID !== await this.event.accountID) {
-        await this.$router.push("/home")
+      this.imageCover = `${this.host}/Files/${this.event.eventCover}`
+      if (await this.users.admins === null) {
+        if (await this.users.creators.creatorID !== await this.event.accountID) {
+          await this.$router.push("/home")
+        } else {
+          this.isOwnEvent = true
+        }
       }
     }
     
