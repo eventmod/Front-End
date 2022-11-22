@@ -16,7 +16,11 @@
 					<div id="type" class="grid grid-cols-3">
 						<label class="uppercase text-violet-900 font-semibold select-none my-auto">Creator Type<span class="text-red-600 align-middle">*</span></label>
 						<select class="col-span-2 rounded-md focus:outline-none h-12 py-1 px-2 shadow-md bg-gray-100" v-model="inputType">
-							<option class=""></option>
+							<option class="">Samo</option>
+							<option class="">Academic Club</option>
+							<option class="">Sport Club</option>
+							<option class="">Opportunity Club</option>
+							<option class="">Faculty Staff</option>
 						</select>
 					</div>
 					<div id="faculty" class="grid grid-cols-3">
