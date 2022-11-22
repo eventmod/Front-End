@@ -52,6 +52,45 @@
 
 			<div v-if="isEdit">
 				<span class="font-bold text-4xl">{{ userDetail.creatorName }}'s Profile</span>
+				<form @submit.prevent="editProfile" class="mt-8">
+					<div class="flex flex-col gap-y-4">
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Username:&nbsp;</label>
+							<input type="text" v-model="inputUsername" placeholder="Username" class="col-span-5" :class="inputClass" disabled/>
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Description:&nbsp;</label>
+							<textarea id="description" v-model="inputDescription" placeholder="Description" class="col-span-5 resize-none h-36 rounded-md focus:outline-none py-1 px-2 shadow-md bg-gray-100" maxlength="599" />
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Type:&nbsp;</label>
+							<input type="text" v-model="inputType" placeholder="Type" class="col-span-5" :class="inputClass" disabled/>
+						</div>
+						<div v-if="user.accountFaculty!=null" class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Faculty:&nbsp;</label>
+							<input type="text" v-model="inputFaculty" placeholder="Faculty" class="col-span-5" :class="inputClass" disabled/>
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Lead Name:&nbsp;</label>
+							<input type="text" v-model="inputLeadName" placeholder="Lead Name" class="col-span-5" :class="inputClass"/>
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Lead Major:&nbsp;</label>
+							<input type="text" v-model="inputLeadMajor" placeholder="Lead Major" class="col-span-5" :class="inputClass"/>
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Advisor Name:&nbsp;</label>
+							<input type="text" v-model="inputAdvisorName" placeholder="Advisor Name" class="col-span-5" :class="inputClass"/>
+						</div>
+						<div class="grid grid-cols-12 text-lg">
+							<label class="col-span-3 uppercase text-violet-900 font-semibold my-auto select-none">Advisor Position:&nbsp;</label>
+							<input type="text" v-model="inputAdvisorPosition" placeholder="Advisor Position" class="col-span-5" :class="inputClass"/>
+						</div>
+						<div class="grid grid-cols-12 mt-4">
+							<button type="submit" class="col-span-8 text-white bg-gradient-to-r from-orange-400 to-orange-300 w-2/3 py-2 rounded-full shadow-lg text-lg uppercase mx-auto">Submit</button>
+						</div>
+					</div>
+				</form>
 			</div>
 
 			<div v-if="isShowChangePassword" class="">
@@ -125,13 +164,22 @@ export default {
       user: '',
       userDetail: '',
 
-			isShowDetail: false,
+			isShowDetail: true,
 			isEdit: false,
-			isShowChangePassword: true,
+			isShowChangePassword: false,
 
 			inputOldPassword: '',
 			inputNewPassword: '',
 			inputConfirmNewPassword: '',
+
+			inputUsername: '',
+			inputDescription: '',
+			inputType: '',
+			inputFaculty: '',
+			inputLeadName: '',
+			inputLeadMajor: '',
+			inputAdvisorName: '',
+			inputAdvisorPosition: '',
 
 		}
 	},
@@ -172,6 +220,14 @@ export default {
 			this.isShowDetail = false
 			this.isEdit = true
 			this.isShowChangePassword = false
+			this.inputUsername = this.user.username
+			this.inputDescription = this.userDetail.creatorDescription
+			this.inputType = this.userDetail.creatorType
+			this.inputFaculty = this.user.accountFaculty
+			this.inputLeadName = this.userDetail.creatorLeadName
+			this.inputLeadMajor = this.userDetail.creatorLeadMajor
+			this.inputAdvisorName = this.userDetail.creatorAdvName
+			this.inputAdvisorPosition = this.userDetail.creatorAdvPosition
 		},
 
 		async showChangePassword() {
@@ -181,6 +237,34 @@ export default {
 		},
 
 		async editProfile() {
+			const creatorData = {
+				creatorID: this.userDetail.creatorID,
+				creatorName: this.userDetail.creatorName,
+				creatorDescription: this.inputDescription ,
+				creatorType: this.inputType ,
+				creatorLeadName: this.inputLeadName,
+				creatorLeadMajor: this.inputLeadMajor,
+				creatorAdvName: this.inputAdvisorName,
+				creatorAdvPosition: this.inputAdvisorPosition,
+			}
+
+			const response = await fetch(`${this.host}/updateCreatorDetail`,{
+				method: "PUT", 
+				headers: {
+					"Content-type": "application/json",
+				},
+				body: JSON.stringify(creatorData)
+			})
+
+			if (response.ok) {
+				this.showModal = true
+				this.status = 1
+				setTimeout( () => location.reload(), 1000);
+			} else {
+				this.showModal = true
+				this.status = 0
+				setTimeout( () => location.reload(), 1000);
+			}
 
 		},
 
