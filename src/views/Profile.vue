@@ -1,12 +1,30 @@
 <template>
-	<div id="aa" class="Each Event pt-52">
+	<div id="aa" class="pt-52">
     <NavBar class="overflow-hidden fixed top-0 w-full z-10" />
     <div class="flex flex-col bg-white mx-80 z-20 rounded-lg shadow-lg px-10 py-12 gap-y-8">
-      <span class="font-bold text-4xl">{{ user.username }}</span>
+      <div v-if="isAdmin" class="flex flex-col">
+				<span class="font-bold text-4xl">{{ userDetail.adminName }}'s Profile</span>
+				<div class="">
+					<span class="">Username: </span>
+					<span class="">{{ user.username }}</span>
+				</div>
+			</div>
+			<div v-if="isCreator">
+				<span>Creator</span>
+				<span>{{ userDetail.username }}</span>
+			</div>
     </div>
     <Footer class="mt-40 w-full" />
   </div>
 </template>
+
+<style>
+#aa{
+  background-image: url(../assets/Group1.png);
+  background-repeat: no-repeat;
+  background-size: 100% 28rem;
+}
+</style>
 
 <script>
 
@@ -35,8 +53,8 @@ export default {
 			const res = await fetch(`${this.host}/me`,{
 				method: "GET",
 				headers: {
-						"Authorization": token,
-					},
+					"Authorization": token,
+				},
 			})
 			if (res.ok) {
 				const user = await res.json()
@@ -46,28 +64,30 @@ export default {
 
     async fetchAdmin() {
       const response = await fetch(`${this.host}/admin/${this.$route.params.id}`,{method: "GET"})
-      return response.json();
+      const admin = await response.json();
+			return admin
     },
 
     async fetchCreator() {
       const response = await fetch(`${this.host}/creator/${this.$route.params.id}`,{method: "GET"})
-      return response.json();
+      const creator = response.json();
+			return creator
     },
 	},
 
 	async created() {
-		await this.getUserFromToken();
     if (localStorage.getItem('token') === null) {
       await this.$router.push("/")
     } else {
+			await this.getUserFromToken();
 			if (await this.user.creators !== null && await this.user.admins === null) {
 				this.isCreator = true
 				this.isAdmin = false
-				this.userDetail = this.fetchCreator()
+				this.userDetail = await this.fetchCreator()
 			} else if (await this.user.admins !== null && await this.user.creators === null) {
 				this.isAdmin = true
 				this.isCreator = false
-				this.userDetail = this.fetchAdmin()
+				this.userDetail = await this.fetchAdmin()
 			}
 		}
 	}

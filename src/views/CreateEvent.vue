@@ -211,12 +211,22 @@
                   </div>
                 </div>
               </div>
-                <!-- End -->
+              <!-- End -->
               
+              <!-- Link -->
+              <div id="link" class="flex flex-col gap-y-2">
+                <div class="">
+                  <label for="link" class="" :class="labelInput">Link To Join </label>
+                  <span class="text-violet-900 font-medium select-none text-xs">(Fill When Joining Out of the System)</span>
+                </div>
+                <input id="link" type="text" v-model="eventJoinLink" placeholder="URI" :class="inputClass" />
+              </div>
+              <!-- Link -->
+
               <!-- Note -->
               <div id="note" class="flex flex-col gap-y-2">
                 <label for="note" class="" :class="labelInput">Note ...</label>
-                <textarea id="note" v-model="eventNote" placeholder=". . . . . . . . ." class="resize-none rounded-md focus:outline-none py-1 px-2 shadow-md bg-gray-100" style="height: 29rem;" />
+                <textarea id="note" v-model="eventNote" placeholder=". . . . . . . . ." class="resize-none rounded-md focus:outline-none py-1 px-2 shadow-md bg-gray-100" style="height: 23rem;" />
               </div>
               <!-- Note -->
             </div>
@@ -302,6 +312,7 @@ export default {
       eventStartTime: '',
       eventEndDate: '',
       eventEndTime: '',
+      eventJoinLink: null,
       eventNote: null,
 
       accountID: 0,
@@ -413,6 +424,7 @@ export default {
           eventCost: this.eventCost,
           eventYear: this.eventYear,
           eventType: this.eventType,
+          eventJoinLink: this.eventJoinLink,
           eventNote: this.eventNote,
           accountID: this.accountID
         }

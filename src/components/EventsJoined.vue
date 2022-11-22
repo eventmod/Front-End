@@ -49,19 +49,6 @@ export default {
     cancel() {
       this.$emit("close");
     },
-
-		displayName: async function (userID) {
-			const responseUser = await fetch(`https://api.line.me/v2/bot/profile/${userID}`, {
-				method: "GET", 
-				headers: {
-					"Content-Type": "application/json",
-					"Authorization": "Bearer " + process.env.VUE_APP_LINE_HEADER_TOKEN
-				}
-			})
-			const user = await responseUser.json()
-			const name = await user.displayName
-			return name
-		}
 	},
 	async created() {
 		
