@@ -15,12 +15,12 @@
 					<table class="w-full text-center">
 						<thead>
 							<th>Student ID</th>
-							<th>LINE Display Name</th>
+							<th>Name</th>
 							<th>KMUTT Mail</th>
 						</thead>
 						<tr v-for="l in lineAccount" :key="l.lineaccounts.lineaccID">
 							<td>{{ l.lineaccounts.lineaccStudentID }}</td>
-							<td>{{ displayName(l.lineaccounts.lineaccUserID) }}</td>
+							<td>{{ l.lineaccounts.lineaccKmuttMail.split('.')[0].toUpperCase() }}</td>
 							<td>{{ l.lineaccounts.lineaccKmuttMail }}</td>
 						</tr>
 					</table>
