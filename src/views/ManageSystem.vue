@@ -120,7 +120,18 @@ export default {
     },
 
     async resetPassword(accountID) {
-      alert(accountID)
+      let formData = new FormData()
+      formData.append("id", accountID)
+      const response = await fetch(`${this.host}/resetPassword`,{method: "PUT", body: formData})
+      if (response.ok) {
+        this.showModal = true
+        this.status = 1
+        setTimeout( () => location.reload(), 1000);
+      } else {
+        this.showModal = true
+        this.status = 0
+        setTimeout( () => location.reload(), 1000);
+      }
     },
 
     async deleteAccount(creatorID, accountID) {
