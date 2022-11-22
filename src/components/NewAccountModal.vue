@@ -41,13 +41,18 @@
 			</div>
 		</div>
   </div>
+	<div v-if="showModal">
+		<status-modal :status="this.status" />
+		<div class="opacity-50 fixed inset-0 z-40 bg-black"></div>
+	</div>
 </template>
 
 <script>
+import StatusModal from '../components/StatusModal.vue'
 
 export default {
 	components: {
-
+		StatusModal
 	},
 	props: {
 
