@@ -277,7 +277,7 @@ export default {
 	],
 	data() {
 		return {
-      stepPage: 2,
+      stepPage: 1,
       users: null,
 
       showModal: false,
