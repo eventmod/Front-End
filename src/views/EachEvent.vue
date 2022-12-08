@@ -2,7 +2,14 @@
   <div id="aa" class="Each Event pt-52">
     <NavBar class="overflow-hidden fixed top-0 w-full z-10" />
     <div class="flex flex-col bg-white mx-80 z-20 rounded-lg shadow-lg px-10 py-12 gap-y-8">
-      <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
+      <!-- <span class="font-bold text-4xl">{{ event.eventTitle }}</span> -->
+      <div class="flex">
+        <span class="font-bold text-4xl">{{ event.eventTitle }}</span>
+        <span v-if="isAdmin" class="ml-auto text-4xl space-x-4 my-auto">
+          <!-- <span class="ri-edit-line text-gray-500 hover:text-green-500" @click="edit()"/> -->
+          <span class="ri-delete-bin-6-line text-gray-500 hover:text-red-500" @click="deleteEvent()"/>
+        </span>
+      </div>
       <!-- <span class="font-normal text-sm text-gray-400 -mt-4">3 May 2022</span> -->
       <img :src="this.imageCover" class="w-full rounded-lg mx-auto object-cover" />
       <div class="text-justify">
@@ -195,6 +202,8 @@ export default {
       showParticipant: false,
 
       isOwnEvent: false,
+
+      isAdmin: false,
 		}
 	},
 	methods: {
@@ -308,6 +317,8 @@ export default {
         } else {
           this.isOwnEvent = true
         }
+      } else {
+        this.isAdmin = true
       }
     }
     
